@@ -1,0 +1,150 @@
+{
+	"model": [{
+		"gameType": "Animation",
+		"name": "鯖臨其境：與鯖共游",
+		"scale": 0.1,
+		"source": ["mesh.zip", "texture.png"],
+		"qrcode": "https://lafun88.pni.tw/mackerel/schooloffish"
+	}, {
+		"gameType": "Music",
+		"name": "⾝鯖如燕：與鯖共舞A",
+		"scale": 0.6,
+		"y": 0,
+		"qrcode": "https://lafun88.pni.tw/mackerel/Dancer_A",
+		"source": ["mesh.fbx", "texture.png","eyes.mp4"]
+	}, {
+		"gameType": "Music",
+		"name": "⾝鯖如燕：與鯖共舞B",
+		"scale": 0.6,
+		"y": 0,
+		"source": ["mesh.fbx","texture.png"],
+		"qrcode": ["https://lafun88.pni.tw/mackerel/Dancer_B"]
+	}, {
+		"gameType": "Music",
+		"name": "⾝鯖如燕：與鯖共舞C",
+		"scale": 0.6,
+		"y": 0,
+		"source": ["mesh.fbx", "texture.png"],
+		"qrcode": "https://lafun88.pni.tw/mackerel/Dancer_C"
+	}, {
+		"gameType": "Q&A",
+		"name": "鯖⽽易舉：冷知識⼤哉問A",
+		"scale": 0.6,
+		"y": 0,
+		"source": ["mesh.fbx", "texture.png", "Yes.fbx","No.fbx","Eyes.png"],
+		"qrcode": "https://lafun88.pni.tw/mackerel/Master_A",
+		"question": "在英語中有⼀句描述天空的詞語 mackerel sky(鯖⿂天空)，它的意思是？",
+		"options": ["A 天空中有像鯖⿂形狀的雲朵，預⽰著好運和豐收","B 天空中雲層像鯖⿂的鱗片⼀樣排列，通常預⽰著天氣即將變化","C 天空中有許多⾶翔的鯖⿂，象徵著⾃由和無拘無束的⽣活","D 天空中充滿了閃閃發光的星星， 像鯖⿂在⽔中游動時反射的光芒"],
+		"answer": 1
+	}, {
+		"gameType": "Q&A",
+		"name": "鯖⽽易舉：冷知識⼤哉問B",
+		"y": 0,
+		"scale": 0.6,
+		"source": ["mesh.fbx", "texture.png", "Yes.fbx","No.fbx","Eyes.png"],
+		"qrcode": "https://lafun88.pni.tw/mackerel/Master_B",
+		"question": "鯖味噌煮（Saba Miso-ni）的起源可以追溯到哪個時代？",
+		"options": ["A 平安時代(約⻄元794-1185年) ","B 室町時代(約⻄元1336-1573年)","C 江⼾時代(約⻄元1603-1868年)","D 明治時代(約⻄元1868-1912年)"],
+		"answer": 2
+	}, {
+		"gameType": "Q&A",
+		"name": "鯖⽽易舉：冷知識⼤哉問C",
+		"scale": 0.6,
+		"qrcode": "https://lafun88.pni.tw/mackerel/Master_C",
+		"question": "“Throw a sprat to catch a mackerel”(丟⼩⿂捉鯖⿂) 這句話的意思是什麼？ ",
+		"options": ["A ⽤⼩⼩的犧牲獲取更⼤的回報","B 團結⼒量⼤ ","C 釣⿂技術精湛 ","D 輕情意重"],
+		"answer": 0,
+		"source": ["mesh.fbx", "texture.png", "Yes.fbx","No.fbx","Eyes.png"]
+	}, {
+		"gameType": "Animation",
+		"name": "甲子大爺(螃蟹)",
+		"scale": 0.09,
+		"y": 0,
+		"source": ["mesh.fbx", "texture.png", "Throw.fbx"],
+		"qrcode": "http://LordWealthyCrabwilisthebestwill"
+	}, {
+		"gameType": "Q&A",
+		"name": "仙鶴一品文官",
+		"scale": 0.03,
+		"y": 0,
+		"source": ["mesh.fbx", "texture.png", "Yes.fbx","No.fbx"],
+		"qrcode": "http://CraneTheFirstranOfficialwilisthebestwill",
+		"question": "這裡曾經住著的是宜蘭的第一個舉人是對還是錯?",
+		"options": ["對","錯"],
+		"answer": 0
+	}, {
+		"gameType": "測試",	
+		"name": "派克墨水",
+		"scale": 0.02,
+		"source": ["mesh.fbx", "texture.png", "mesh.obj", "texture.jpg"],
+		"y": 0,
+		"qrcode": "https://166#010672512484853338171298701322938020014575766329330701437832165661332592031982224888347874675130693258586818527447766497328685661981083485080032378682682341341371426680000000853372549354596338683456011045976021458684164046693725346648159957497103842298677378533209346077277015976043427683"
+	}, {
+		"name": "測試",
+		"scale": 0.85,
+		"y": -8.5,
+		"qrcode": "GoFind"
+	}],
+	"dialogue": [{
+		"chapter": " ",
+		"title": "開始探索鯖魚世界！"
+	}, {
+		"close": true,
+		"find": 6
+	}, {
+		"character": " ",
+		"content": "咕嚕咕嚕~你可以搭船漫遊、靜享河岸光景，傍鄰冬山河內河道，順著坡道的街屋，高低交錯中呈現河岸建築的景緻，波光瀲灩、拱橋流水，享受河上靜謐的閒趣。"
+	}, {
+		"close": true,
+		"find": 9
+	}, {
+		"character": " ",
+		"content": "黃舉人宅是150歲的三合院建築，曾經住了宜蘭第一位舉人，只要你認真讀書也會青出於藍、更上一層樓，考試100分，成為一品文官！"
+	}, {
+		"close": true,
+		"find": 5
+	}, {
+		"content": "展示館的展覽展出很多臺灣傳統文物，這些重要的文化資產都由我們來守護，快找找有沒有我們的身影。"
+	}, {
+		"close": true,
+		"find": 4
+	}, {
+		"character": " ",
+		"content": "文昌祠是園區的信仰中心，想要祈求平安、學業、功名都可以來跟文昌帝君聊聊。你要不要吃橘子啊！"
+	}, {
+		"close": true,
+		"find": 2
+	}, {
+		"character": " ",
+		"content": "快看！魯班街這裡有很多精美的傳統工藝品，藍染、木藝、琉璃、金工等，本虎最喜歡這裡的手作體驗了！"
+	}, {
+		"close": true,
+		"find": 3
+	}, {
+		"character": " ",
+		"content": "臨水劇場每天都有好多的表演節目，有歌仔戲、布袋戲、偶劇、雜技等表演，來臨水劇場看我動人的表演吧~"
+	}, {
+		"close": true,
+		"find": 7
+	}, {
+		"content": "廣孝堂是100歲的家廟建築，原是宜蘭市鄭氏家廟，風格深具宜蘭特色，彩繪是在地曾萬一司阜所繪，也是目前僅存最完整的作品呀呀我還沒說完…"
+	}, {
+		"close": true,
+		"find": 8
+	}, {
+		"character": " ",
+		"content": "遇水則發！嘿嘿~這些霧氣都是財運呀！跟你介紹右邊是演藝廳(用各種腳指路)、左邊是鳳凰姐姐的臨水劇場、後面是曲藝館，我平常最喜歡看戲聽曲了。"
+	}, {
+		"close": true,
+		"find": 1
+	}, {
+		"character": " ",
+		"content": "文昌街是傳藝園區的主要街道，這裡百工匯集、熱鬧非凡，古色古香的牌樓街道充滿許多小賣店，讓我帶你逛街探尋。"
+	}, {
+		"close": true,
+		"find": 10
+	},{
+		"character": " ",
+		"content": "測試。"
+	}]
+}

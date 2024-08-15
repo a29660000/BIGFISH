@@ -1,0 +1,3025 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta HTTP-EQUIV="EXPIRES" CONTENT="Mon, 22 Jul 2002 11:12:01 GMT">
+    <meta content="大鯖魚" property="og:description">
+    <title>大鯖魚</title>
+    <link href="css.css?decache=12" rel="stylesheet">
+    <link href="littlegame.css" rel="stylesheet">
+    
+    <style>
+        html, body {
+            background-color: #F0EBE3;
+        }
+        body {
+            visibility: hidden;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="jquery.mousewheel.min.js"></script>
+    <script src="jquery-ui.min.js"></script>
+    <script src='three.min.js'></script>
+    <script src="fflate.min.js"></script>
+    <script src='AjaxTextureLoader.js'></script>
+    <script src='three.doc.js'></script>
+    <script src="OBJLoader.js"></script>
+	<script src="FBXLoader.js"></script>
+	<script src="FBXLoader_Real.js"></script>
+	<script src="progressbar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.0/dist/html2canvas.min.js"></script>
+    
+    <script>
+        var urlData = {};
+        var foundARIndex = 0;
+        var dialogueindex = -1;
+        var GameType = '';
+        var Currentmodel;
+        var CollectARMode = false;
+        var Currentdata;
+        let action;
+        let FBX_Throw_me;
+        let discriptionFinish = true;
+        let audiomusic;
+        
+        (function() {
+            var urlSite = String(document.URL).split('?');
+            if (urlSite[1]) {
+                var varGroup = urlSite[1].split('&');
+                for (var i in varGroup)
+                    urlData[String(varGroup[i].split('=')[0]).toLowerCase()] = varGroup[i].split('=')[1];
+            }
+        })();
+        function log(value, clear) {
+            if(clear) $('#log').html('');
+            $('#log').append(value + '<br/>');
+        }
+        $(function() {
+            //Check is mobile
+            var isMobile = false;
+            (function(a) {
+                if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) isMobile = true;
+            })(navigator.userAgent || navigator.vendor || window.opera);
+            //Device Ratio
+            var deviceRatio = 1;
+            (function() {
+                //$('body').append('<canvas></canvas>');
+                var ctx = $('canvas')[0].getContext('2d');
+                deviceRatio = (window.devicePixelRatio || 1) / (ctx.webkitBackingStorePixelRatio ||
+                    ctx.mozBackingStorePixelRatio ||
+                    ctx.msBackingStorePixelRatio ||
+                    ctx.oBackingStorePixelRatio ||
+                    ctx.backingStorePixelRatio || 1);
+                //$('canvas').remove();
+            })();
+            $('body').css('visibility', 'visible');
+
+            /*$('#start-page').on('touchstart', function(e) {
+                e = e.originalEvent;
+                if(e.touches.length >= 2)
+                    e.preventDefault();
+            });*/
+
+            //訊息
+            function setMessage(message) {
+                //$('#loading').remove();
+                $('#info').html(message || '');
+            }
+
+            //檢查https
+            if(isMobile && window.location.protocol == 'http:') {
+                // setMessage('本網頁只能在https協議下運作');
+                return;
+            }
+
+            //Camera
+            function startCamera() {
+                var checkFinish = false;
+                function onError(error) {
+                    if (checkFinish) return;
+                    checkFinish = true;
+                    setMessage('無法取得手機鏡頭權限<br/>請使用其他瀏覽器嘗試');
+                }
+                // check API is available
+                if (navigator.mediaDevices === undefined ||
+                    navigator.mediaDevices.enumerateDevices === undefined ||
+                    navigator.mediaDevices.getUserMedia === undefined) {
+                    /*if (navigator.mediaDevices === undefined) var fctName = 'navigator.mediaDevices';
+                    else if (navigator.mediaDevices.enumerateDevices === undefined) var fctName = 'navigator.mediaDevices.enumerateDevices';
+                    else if (navigator.mediaDevices.getUserMedia === undefined) var fctName = 'navigator.mediaDevices.getUserMedia';
+                    else console.assert(false);*/
+                    onError();
+                    return null;
+                }
+                navigator.mediaDevices.enumerateDevices().then(function(devices) {
+                    if (checkFinish) return;
+                    var userMediaConstraints = {
+                        audio: false,
+                        video: isMobile ? {
+                            /*width: { min: 320, ideal: 640, max: 1280 },
+                            height: { min: 240, ideal: 480, max: 800 }, 
+                            frameRate: { min:15, ideal: 30, max: 60 },*/
+                            facingMode: 'environment',
+                            /*facingMode: {
+                                exact: 'environment'
+                            }*/
+                            /*facingMode: 'environment',
+                            width: {
+                              min: 1280,
+                            },
+                            height: {
+                              min: 720,
+                            }*/
+                            //video: { width: 1280, height: 720 }
+                            width: {
+                                //ideal: 640
+                                ideal: 1280//1280
+                                // min: 1024,
+                                // max: 1920
+                            },
+                            height: {
+                                //ideal: 480
+                                ideal: 720
+                                // min: 776,
+                                // max: 1080
+                            }
+                        }: {
+                            /*width: {
+                                ideal: 1920
+                            },
+                            height: {
+                                ideal: 1080
+                            }*/
+                        }
+                    };
+                    // 187496da5d1744c2a001e142d9937f25d84ca815beb06f3b47ae2183f73ed8e8
+                    var deviceId = '';
+                    devices.forEach(function(e) {
+                        if(e.kind == 'videoinput')
+                            if(e.label.toLowerCase().search('back') != -1)
+                                deviceId = e.deviceId;
+                    });
+                    if(deviceId) userMediaConstraints.video.deviceId = {exact: deviceId};
+                    // get a device which satisfy the constraints
+                    navigator.mediaDevices.getUserMedia(userMediaConstraints).then(function success(stream) {
+                        //console.log(stream);
+                        if (checkFinish) return;
+                        checkFinish = true;
+                        /**try {
+                            const used_devices = stream.getTracks().map((track) => track.getSettings().deviceId);
+                            scanner.deviceId = used_devices[0];
+                        } catch (e) {}**/
+                        //
+                        //$('body').append('<video id="temp-video" autoplay muted playsinline></video>');
+                        // set the .src of the domElement
+                        $('#video')[0].srcObject = /*scanner.stream = */stream;
+                        // to start the video, when it is possible to start it only on userevent. like in android
+                        $('#video')[0].play();
+                        /*$('video').on('error', function(e) {
+                            //if (checkFinish) return;
+                            //onError('error');
+                            alert('Error');
+                        });*/
+                        var currentTime = new Date().getTime();
+                        function checkResize() {
+                            if($('#video')[0].videoWidth > 0 && $('#video')[0].videoHeight > 0) {
+                                onReady();
+                                //setMessage();
+                            } else if(new Date().getTime() - currentTime < 5000)
+                                requestAnimationFrame(function() {
+                                    checkResize();
+                                });
+                            else setMessage('無法啟用相機，請確認是否有其他程式正在使用相機');//超過5秒沒有判定完成就當作無法開啟
+                        }
+                        checkResize();
+                    }).catch(function(error) {
+                        onError(error);
+                    });
+                }).catch(function(error) {
+                    onError(error);
+                });
+            }
+            //Three
+            var renderer = null;
+            try {
+                renderer = new THREE.WebGLRenderer({
+                    antialias: !isMobile,
+                    //logarithmicDepthBuffer: true,
+                    //alpha: true,
+                    preserveDrawingBuffer: true// required to support .toDataURL()
+                });
+            } catch (e) {
+                setMessage('您的瀏覽器不支援WebGL，請使用其他瀏覽器嘗試');
+                return;
+            }
+            renderer.setClearColor('#000000', 0);
+            renderer.setPixelRatio(deviceRatio);//console.warn(deviceRatio);
+            /**renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;**/
+            renderer.autoClear = false;
+            $('#three')[0].appendChild(renderer.domElement);
+            var scene = new THREE.Scene();
+            //scene.fog = new THREE.FogExp2('#000000', 0.005);
+            //scene.fog = new THREE.Fog('#000000', 500, 1200);
+            var scene2D = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 1, 1000000); //45 85
+            var camera2D = new THREE.OrthographicCamera(0, 0, 0, 0, 1, 10);
+            //PC的視角是往後移動40公分
+            camera.targetDistance = 40; 
+            if(!isMobile)
+                camera.position.set(0, 0, camera.targetDistance);
+            camera2D.position.set(0, 0, 1);
+            //camera.rotation.set(-90 * (Math.PI / 180), 0, 0);
+            scene.add(camera);
+            scene2D.add(camera2D);
+            /**var shadowPlane = new THREE.Mesh(new THREE.PlaneGeometry(10000, 10000), new THREE.ShadowMaterial({opacity: 0.2, depthWrite: false}));
+            shadowPlane.rotateX(-Math.PI / 2);
+            shadowPlane.receiveShadow = true;
+            scene.add(shadowPlane);**/
+            /*var modelGroup = new THREE.Group();
+            modelGroup.visible = false;
+            scene.add(modelGroup);*/
+            var lightGroup = new THREE.Group();
+            scene.add(lightGroup);
+            var hemiLight = new THREE.HemisphereLight('#FFFFFF', '#444444', 0.5);
+            hemiLight.position.set(0, 200, 0);
+            scene.add(hemiLight);
+            var directionalLight = new THREE.DirectionalLight('#FFFFFF', 1);
+            directionalLight.position.set(0.2, 1, 0.2);
+            /**directionalLight.castShadow = true;
+            directionalLight.shadow.camera.near = -2500;
+            directionalLight.shadow.camera.far = 2500;
+            directionalLight.shadow.camera.top = 2500;
+            directionalLight.shadow.camera.bottom = -2500;
+            directionalLight.shadow.camera.left = -2500;
+            directionalLight.shadow.camera.right = 2500;
+            directionalLight.shadow.mapSize.width = 4096;
+            directionalLight.shadow.mapSize.height = 4096;**/
+            lightGroup.add(directionalLight);
+            
+            var videoPlane = null;
+            function requestPermission() {
+                //console.log('requestPermission')
+                var videoTexture = new THREE.VideoTexture($('#video')[0]);
+                videoPlane = new THREE.Mesh(
+                    new THREE.PlaneBufferGeometry(1, 1),
+                    new THREE.MeshBasicMaterial({map: videoTexture})
+                );
+                scene2D.add(videoPlane);
+                
+                $('#loading').remove();
+                var playStep = 0;
+                $('#play').show().click(function() {
+                    if(playStep == 2) return;
+                    if(playStep == 0) {
+                        //$(this).css('pointer-events', 'none');
+                        //onReady();
+                        // $('#start-page input').show()[0].focus();
+                        // $('#start-page .name').show();
+                        // $('#start-page .title').hide();
+                        $('#play').text('GO').show()[0].disabled = false;
+                        playStep = 1;
+                        return;
+                    }
+                    // playStep = 2;
+                    // dialogue.setName($('#start-page input').val());
+                    // $(this).hide();
+                    // $('#start-page input')[0].blur();
+                    // $('#start-page .title, #start-page .name, #start-page input').hide();
+                    setMessage('請稍後...');
+                    if(typeof(DeviceMotionEvent) !== 'undefined' && typeof(DeviceMotionEvent.requestPermission ) === 'function') {
+                        // (optional) Do something before API request prompt.
+                        DeviceMotionEvent.requestPermission()
+                            .then(response => {
+                            // (optional) Do something after API prompt dismissed.
+                            if(response == 'granted') {
+                                /*window.addEventListener( "devicemotion", (e) => {
+                                    // do something for 'e' here.
+                                })*/
+                                startCamera();
+                            } else setMessage('無法取得動作和方向權限');
+                        })
+                        .catch(console.error);
+                    } else {
+                        //alert( "DeviceMotionEvent is not defined" );
+                        startCamera();
+                    }
+                });
+
+                // if(typeof(DeviceMotionEvent) !== 'undefined' && typeof(DeviceMotionEvent.requestPermission ) === 'function') {
+                //         // (optional) Do something before API request prompt.
+                //         DeviceMotionEvent.requestPermission()
+                //             .then(response => {
+                //             // (optional) Do something after API prompt dismissed.
+                //             if(response == 'granted') {
+                //                 /*window.addEventListener( "devicemotion", (e) => {
+                //                     // do something for 'e' here.
+                //                 })*/
+                //                 startCamera();
+                //             } else setMessage('無法取得動作和方向權限');
+                //         })
+                //         .catch(console.error);
+                //     } else {
+                //         //alert( "DeviceMotionEvent is not defined" );
+                //         startCamera();
+                //     }
+                
+
+                                    
+                // if(typeof(DeviceMotionEvent) !== 'undefined' && typeof(DeviceMotionEvent.requestPermission ) === 'function') {
+                //         // (optional) Do something before API request prompt.
+                //         DeviceMotionEvent.requestPermission()
+                //             .then(response => {
+                //             // (optional) Do something after API prompt dismissed.
+                //             if(response == 'granted') {
+                //                 /*window.addEventListener( "devicemotion", (e) => {
+                //                     // do something for 'e' here.
+                //                 })*/
+                //                 startCamera();
+                //             } else setMessage('無法取得動作和方向權限');
+                //         })
+                //         .catch(console.error);
+                // } else {
+                //     //alert( "DeviceMotionEvent is not defined" );
+                //     startCamera();
+                // }
+                
+                // startCamera();
+                $('#start-page .title').show();
+                $('#start-page input').on('input', function() {
+                    $('#play')[0].disabled = !$(this).val();
+                });
+                // $(document).keydown(function(e) {
+                //     if(playStep == 1 && !$('#play')[0].disabled && e.originalEvent.keyCode == 13) $('#play').click();
+                // });
+
+                //Tim
+                $('#play').click();
+                //
+                resize();
+                update();
+            }
+
+            function onReady() {
+                //console.log('onReady')
+                //modelGroup.visible = false;
+                $('#start-page').css({
+                    opacity: 0,
+                    'pointer-events': 'none'
+                });
+                setTimeout(function() {
+                    $('#start-page').remove();
+                }, 5000);
+                //
+                ////scanner.start();
+                setTimeout(function() {
+                    dialogue.next();
+                }, 500);
+            }
+
+            var GameTime = {
+                SelectedGame: function(value, mesh){
+
+                    const TakePhoto = document.querySelector('.TakePhoto');
+                    const MenuButton = document.querySelector('.MenuButton');
+                    const CollecReturnimg = document.querySelector('.CollecReturnimg');
+
+                    if (value != '' && mesh) {
+                        $('#dialogue').css('z-index', -999);
+                        $('#dialogue').css('opacity', 0);
+                        switch (value) {
+                            case 'Q&A':
+                                $('.QuizCanvas').css('z-index', 9);
+                                showQuestion();
+                                MenuButton.style.display = 'none';
+                                // CollecReturnimg.style.display = 'block';
+                                // mesh.position.set(0, -20, 0);
+                                // mesh.scale.set(1, 1, 1);
+                                break;
+                            case 'paper rock scissors': 
+                                $('.PaperRockScissorsCanvas').css('z-index', 9);
+                                // const initialOffset = { x: 0, y: 50, z: 0 };
+                                
+                                // mesh.set(initialOffset.x, initialOffset.y, initialOffset.z);
+                                // var copyRotation = mesh.rotation.clone();
+                                // mesh.rotation.copy(camera.rotation);
+                                // mesh.translateX(0);
+                                // mesh.translateY(0);
+                                // mesh.rotation.copy(copyRotation);
+                                break;
+                                case 'Music': 
+                                console.log('音符晃動');
+                                console.log(foundARIndex + 1);
+                                // 構建音樂檔案的路徑
+                                const musicFilePath = `model/${foundARIndex + 1}/music.mp3`;
+
+                                // 創建一個 Audio 物件
+                                audiomusic = new Audio(musicFilePath);
+                                // 檢查音樂檔案是否存在
+                                audiomusic.addEventListener('canplaythrough', function() {
+                                    console.log('音樂已準備好播放');                                               
+                                    CollecReturnimg.style.display = 'block';       
+                                    MenuButton.style.display = 'none';
+
+                                    // 播放音樂
+                                    audiomusic.play().catch(error => console.error('音樂播放失敗:', error));
+                                }, false);
+
+                                // 錯誤處理，檢查檔案是否存在或其他錯誤
+                                audiomusic.addEventListener('error', function() {
+                                    console.error('無法加載音樂:', musicFilePath);
+                                }, false);
+                                // 播放完成後處理
+                                audiomusic.addEventListener('ended', function() {
+                                    console.log('播放完成');
+                                    CollecReturnimg.style.display = 'none';       
+                                    MenuButton.style.display = 'block';
+                                    model.close();
+                                    scanner.start();
+                                    // 在這裡添加你想要在音樂播放完後執行的後續處理邏輯
+                                });
+                                break;
+
+                            case 'Animation':
+                                TakePhoto.style.display = 'block';
+                                MenuButton.style.display = 'none';
+                                CollecReturnimg.style.display = 'block';
+                                // $('.VideoCanvas').css('z-index', 9);
+                                // loadButton.style.display = 'block';
+                                // Add animation-related code here
+                                break;
+                            case 'share':
+                                // Add share-related code here
+                                break;
+                            default:
+                                // Handle other cases if necessary
+                                break;
+                            }
+                        } else {
+                            // 無執行互動
+                    }                              
+                }
+            };
+
+            window.dialogue = {
+                dom: $('#dialogue')[0],
+                init: function() {
+                    var me = this;
+                    //按對話框可跳過對話，按對話框或空白處可跳過標題
+                    this.panel = this.find('.panel').click(function() {
+                        me.next();
+                    }).on('touchstart', function(e) {
+                        me.passChapter();
+                    }).on('mousedown', function(e) {
+                        me.passChapter();
+                    });
+                    $('#three').on('touchstart', function(e) {
+                        me.passChapter();
+                    }).on('mousedown', function(e) {
+                        me.passChapter();
+                    });
+                    this.mainPanel = this.find('.main');
+                    this.character = this.find('.character');
+                    this.name = this.find('.name');
+                    this.content = this.find('.content');
+                    this.arrow = this.find('.next');
+                    this.background = this.find('.background');
+                    this.chapterPanel = this.find('.chapter');
+                    this.chapterTitle = this.find('.chapter .title');
+                    this.chapterSubtitle = this.find('.chapter .subtitle');
+                    this.mask = this.find('.mask');
+                    this.finish = this.find('.finish');
+                    this.finishPanel = this.find('.finish .finish-panel');
+                    //重玩
+                    this.replay = this.find('.finish .replay').click(function() {
+                        me.finish.removeClass('show');
+                        setTimeout(function() {
+                            me.next(true);
+                        }, 1000);
+                    });
+                    return this;
+                },    
+                RemoveCollectARMode: function() {
+                    this.content.html('到各地尋找神獸吧！');
+                },
+                find: function(value) {
+                    return $(this.dom).find(value);
+                },
+                index: 0,
+                next: function(force) {
+                    var dialogue = this.data[dialogueindex];
+                    if(!force) {
+                        if(dialogue && dialogue.finish) return; //已結束
+                        if(dialogue && dialogue.find) return; //還沒找到東西
+                        if(dialogue && dialogue.chapter) return; //顯示章節名稱
+                    }
+                    //對話還沒完
+                    if(this.talk && this.lastTalkCount < this.talk.length) {
+                        //////this.content.html(this.setKeyword(this.talk)).scrollTop(99999);
+                        this.setContentAndScroll(this.setKeyword(this.talk));
+                        ///delete this.talk;
+                        ///this.panel.removeClass('speaking');
+                        this.setSpeaking(false);
+                        return;
+                    }
+                    dialogueindex++;
+                    dialogue = this.data[dialogueindex];
+
+                    console.log('目前第幾句話',dialogueindex)
+                    // if(dialogueindex>=0 && dialogueindex<4){
+                    //     $('.headBG_container').css('opacity', 1);
+                    // }else{
+                    //     $('.headBG_container').css('opacity', 0);
+                    //     document.querySelector('.header-container').style.display = 'flex';;                      
+                    // }
+
+                    // // 處理完成遊戲的畫面
+                    // if(IndexDBArray_Beastnumber.length >= 9){
+                    //     $('.headBG_container').css('opacity', 1);
+                    //     setTimeout(() => {
+                    //         this.character.addClass('show');
+                    //     }, 10);
+                    //     // dialogueindex = 2
+                    // }
+
+//                     if (dialogueindex == 4 && IndexDBArray_Beastnumber.length == 0) {
+//     discriptionFinish = false;
+//     let step = 0;
+//     let mapButtonClickCount = 0;
+//     console.log('觸發說明')
+
+//     nextStep();
+
+//     function nextStep() {
+//         if(!discriptionFinish){
+//         switch (step) {
+//             case 0:
+//                 $('.CollectButton').css('visibility', 'hidden');
+//                 startBlink('.MapButton', '地圖！所有的神獸夥伴都隱藏在地圖裡的某個角落，啟程去邀請他們加入你的守護隊伍裡吧！');
+//                 document.querySelector('.MapButton').addEventListener('click', () => {
+//                     mapButtonClickCount++;
+//                     console.log(mapButtonClickCount, '幾次')
+//                     nextStep();
+//                     if (mapButtonClickCount > 1) {
+//                         console.log(mapButtonClickCount, '兩次!')
+//                         stopBlink();
+//                         step++;
+//                         nextStep();
+//                     }
+//                 }, { once: true });
+//                 break;
+//             case 1:
+//                 startBlink('.CollectButton', '神獸蒐集！');
+//                 $('.CollectButton').css('visibility', 'visible');
+//                 $('.MapButton').css('visibility', 'hidden');
+//                 document.querySelector('.CollectButton').addEventListener('click', () => {
+//                     stopBlink();
+//                     step++;
+//                     nextStep();
+//                 }, { once: true });
+//                 break;
+//             case 2:
+//                 startBlink('.grid-container', '所有邀請的神獸，都會在這裡駐足，點擊神獸的圖片，還可以跟他們合照與獲得他們守護當地的資訊。let’s go！啟程去邀請他們吧！');
+//                 $('.CollectButton').css('visibility', 'hidden');
+//                 $('.CardButton').css('visibility', 'hidden');
+//                 setTimeout(() => {
+//                     stopBlink();
+//                     step++;
+//                     nextStep();
+//                 }, 6000);
+//                 break;
+//             case 3:
+//                 startBlink('.CardButton', '神獸祈福卡！');
+//                 $('.CardButton').css('visibility', 'visible');
+//                 document.querySelector('.CardButton').addEventListener('click', () => {
+//                     if(!discriptionFinish){
+//                         stopBlink();    
+//                     startBlink('.CardButton', '收集到六個神獸後，就能獲得第一張祈福卡，九個神獸就能獲得第二張，趕快去收集吧！');
+//                     setTimeout(() => {
+//                         stopBlink();
+//                         discriptionFinish = true;
+//                         $('.MapButton').css('visibility', 'visible');
+//                     }, 6000);
+//                     }
+
+//                 }, { once: true });
+//                 break;
+//             default:
+//                 break;
+//         }
+//     }
+
+//     function startBlink(target, tipcontent) {
+//         const div = document.querySelector(target);
+//         div.classList.add('blink-border');
+//         showTooltip(div, tipcontent);
+//     }
+
+//     function stopBlink() {
+//         const elements = document.querySelectorAll('.blink-border');
+//         elements.forEach((element) => {
+//             element.classList.remove('blink-border');
+//         });
+//         hideTooltip();
+//     }
+
+//     function showTooltip(element, text) {
+//         const tooltip = document.createElement('div');
+//         tooltip.className = 'tooltip';
+//         tooltip.innerText = text;
+
+//         const button = document.createElement('button');
+//         button.className = 'close-tooltip';
+//         // button.innerText = '…';
+//         button.onclick = () => {
+//             hideTooltip();
+//             stopBlink();
+//             discriptionFinish = true;
+
+//             $('.CollectButton').each(function() {
+//     if ($(this).css('visibility') === 'hidden' && $('.CardBG').css('display') != 'block') {
+//         $(this).css('visibility', 'visible');
+//     }
+// });
+
+
+// $('.CardButton').each(function() {
+//     if ($(this).css('visibility') === 'hidden') {
+//         $(this).css('visibility', 'visible');
+//     }
+// });
+
+// $('.MapButton').each(function() {
+//     if ($(this).css('visibility') === 'hidden') {
+//         $(this).css('visibility', 'visible');
+//     }
+// });
+
+
+//         };
+
+//         tooltip.appendChild(button);
+//         document.body.appendChild(tooltip);
+
+//         const rect = element.getBoundingClientRect();
+//         const tooltipRect = tooltip.getBoundingClientRect();
+//         const spaceRight = window.innerWidth - rect.right;
+//         const spaceLeft = rect.left;
+//         let tooltipX = rect.left + window.scrollX;
+//         let tooltipY = rect.top + window.scrollY + rect.height + 40;
+
+//         if (spaceRight < tooltipRect.width) {
+//             tooltipX = rect.right - tooltipRect.width + window.scrollX;
+//         }
+
+//         if (spaceLeft < tooltipRect.width / 2) {
+//             tooltipX = window.scrollX + 10;
+//         }
+
+//         if (tooltipY + tooltipRect.height > window.innerHeight + window.scrollY) {
+//             tooltipY = rect.top + window.scrollY - tooltipRect.height - 10;
+//         }
+//         tooltip.style.top = `${tooltipY}px`;
+//         tooltip.style.left = `${tooltipX}px`;
+//     }
+
+//     function hideTooltip() {
+//         const tooltips = document.querySelectorAll('.tooltip');
+//         tooltips.forEach((tooltip) => {
+//             tooltip.remove();
+//         });
+//     }
+// }
+// }
+
+                    //重玩(暫時)
+                    if(!dialogue) {
+                        //return;
+                        this.index = 1;
+                        dialogue = this.data[0];
+                    }
+
+                    if(dialogue.close) model.close();
+                    if(dialogue.find) {
+                        //this.content.html('請尋找「' + model.source[dialogue.find - 1].name + '」');
+                        this.checkFind();
+                        this.panel.addClass('find');
+                        scanner.start();//最後再呼叫scanner.start才會算出正確的高度
+                    } else {
+                        //this.content.html(dialogue.content);
+                        this.setContent(dialogue.content);
+                        this.panel.removeClass('find');
+                    }
+                    //console.log(this.index, this.data.length)
+                    if(dialogue.finish) {
+                        this.finish.addClass('show');
+                        this.mainPanel.removeClass('show');
+                        this.mask.addClass('show');
+                    } else if(dialogue.chapter) {
+                        this.chapterTitle.text(dialogue.chapter);
+                        this.chapterSubtitle.text(dialogue.title);
+                        this.chapterPanel.addClass('show');
+                        this.mainPanel.removeClass('show');
+                        this.mask.addClass('show');
+                        var me = this;
+                        setTimeout(function() {
+                            //$(me.dom).addClass('can-pass');
+                            me.passChapterTimeout = setTimeout(function() {
+                                /*me.chapterPanel.removeClass('show');
+                                setTimeout(function() {
+                                    me.next(true);
+                                }, 1000);*/
+                                me.finishChapter();
+                            }, 3000);
+                        }, 700);
+                    } else
+                    //mainPanel顯示對話框
+                    // this.mainPanel.addClass('show');
+                    //是否顯示鍾老
+                    if(dialogue.character == 2)
+                        this.character.addClass('show');
+                    else this.character.removeClass('show');
+                    //否顯對話角落
+                    if(dialogue.character == 1) {
+                        this.background.removeClass('top');
+                        this.background.addClass('bottom');
+                    } else if(dialogue.character == 2) {
+                        this.background.removeClass('bottom');
+                        this.background.addClass('top');
+                    } else {
+                        this.background.removeClass('top');
+                        this.background.removeClass('bottom');
+                    }
+                    //下棋
+                    if(dialogue.chess && model.playChess) model.playChess();
+                    //
+                    //this.find('.background').css('height', this.content.outerHeight() + 'px');
+                },
+                // checkFind: function(url) {
+                    
+
+                //     var dialogue = this.data[this.index - 1];
+                //     var modelData = model.source[dialogue.find - 1];
+
+                //     console.log(url);
+                //     console.log('dialogue',dialogue);
+                //     console.log('modelData',modelData);
+
+                //     if(url && (modelData.qrcode[url] || urlData.debug == 'true')/*url == modelData.qrcode*/) {
+                //         if(dialogue.find) this.content.html('找到' + modelData.name + '了');
+                //         scanner.setError(false);
+                //         return modelData.id;
+                //     } 
+                //     scanner.setError(url);
+                //     if(dialogue.find) this.content.html(url ? '<span class="error">這不是' + modelData.name + '</span>' : '請尋找「' + modelData.name + '」');
+                // },
+
+                checkFind: function(url) {
+                    
+                    console.log('url為',url)
+
+                    // 遍歷所有的 model.source
+                    for (var i = 0; i < model.source.length; i++) {
+                        // console.log('執行' + model.source.length + '次');
+                        var currentModel = model.source[i];
+                        // console.log(currentModel.qrcode);
+                        // 檢查是否有匹配的 QR code
+                        if (currentModel.qrcode[url]) {
+                            foundARIndex = i;
+                            console.log('foundIndex', foundARIndex);
+                            break;
+                        }
+                    }
+
+
+                    var dialogue = this.data[dialogueindex];
+                    var modelData = model.source[foundARIndex];
+
+                     // 遍歷 dialogue，找到 find 等於 foundARIndex 的項    
+                     for (var j = 0; j < this.data.length; j++) {
+                        if (this.data[j].find === foundARIndex + 1) {
+                            dialogueindex = j;
+                            break;
+                        }
+                    }
+
+                    // dialogue = this.data[dialogueindex];
+
+
+                    // console.log(url);
+                    
+                    // console.log('dialogue',dialogue);
+                    // console.log('modelData',modelData);    
+                    // 檢查 foundARIndex 是否在 IndexDBArray_Beastnumber 中
+                    if (IndexDBArray_Beastnumber.length >= 9) {
+    $('.content').css('font-size', '15px');
+    if (dialogue.find) {
+        this.content.html(url ? 
+            '<span class="error">你已經有這個神獸囉！</span>' :       
+            '冒險者恭喜你，你已成功蒐集九隻神獸，成為傳藝園區的一級玩家，歡迎到宜蘭傳藝專頁查看專屬於你的優惠訊息。'
+        );
+        // 动态添加按钮到 body 中
+        if(!document.querySelector('.Final-button')){
+            $('body').append('<div class="Final-button"><a href="https://www.px-sunmake.org.tw/index/" target="_blank" class="link-button">宜蘭傳藝專頁網址</a><a href="https://www.facebook.com/sunmakecultures/?locale=zh_TW" target="_blank" class="image-button"><img src="UI/Facebook.png" alt="Facebook"></a></div>');
+        }
+    }
+    scanner.setError(url);
+    return;
+}
+
+
+
+
+
+                    if (!discriptionFinish) {
+                        if (dialogue.find) this.content.html('功能介紹！');
+                        // $('.content').css('font-size', '15px');
+                        scanner.setError(url);
+                        return;
+                    }
+   
+                    // if (IndexDBArray_Beastnumber.includes(foundARIndex + 1)) {
+                    //     // $('.content').css('font-size', '25px');
+                    //     if (dialogue.find) this.content.html(url ? '<span class="error">你已經有這個神獸囉！</span>' : '找出各地的神獸！');
+                    //     scanner.setError(url);
+                    //     return;
+                    // }
+
+
+                    if(url && (modelData.qrcode[url] || urlData.debug == 'true')/*url == modelData.qrcode*/) {
+                        if(dialogue.find) this.content.html('找到' + modelData.name + '了');
+                        scanner.setError(false);
+                        return modelData.id;
+                    } 
+                    scanner.setError(url);
+                    // if(dialogue.find) this.content.html(url ? '<span class="error">這不是' + modelData.name + '</span>' : '找出各地的神獸！');
+                    if(dialogue.find) this.content.html(url ? '<span class="error">這不是神獸' + '</span>' : '找出各地的神獸！');
+                },
+
+                passChapter: function() {
+                    if(this.passChapterTimeout)
+                        this.finishChapter();
+                },
+                finishChapter: function() {
+                    //if(this.index >= this.data.length) return;//體驗完成不能跳過
+                    if(this.passChapterTimeout) {
+                        clearTimeout(this.passChapterTimeout);
+                        delete this.passChapterTimeout;
+                    }
+                    //$(this.dom).removeClass('can-pass');
+                    this.chapterPanel.removeClass('show');
+                    this.mask.removeClass('show');
+                    var me = this;
+                    setTimeout(function() {
+                        me.next(true);
+                    }, 1000);
+                },
+                getHeight: function() {
+                    return parseFloat(this.mainPanel.css('padding-bottom')) + this.panel.outerHeight() + 20;
+                },
+                time: 0,
+                endTalkTime: 0,
+                update: function(time) {
+                    this.time = time;
+                    if(!this.data || this.panel.hasClass('find')) return;
+                    if((time - this.endTalkTime) % 1000 < 500)
+                        this.arrow.removeClass('down');
+                    else this.arrow.addClass('down');
+                    //this.arrow.css('bottom', 'calc(20% - ' + ((time - this.endTalkTime) % 1000 < 500 ? '0px' : '2px') + ')');
+                    //嘴巴動
+                    if(this.lastMouseOpen >= 0 && this.character.hasClass('show')) {
+                        var mouseOpenCount = Math.floor((time - this.startTalkTime) / 150);
+                        if(this.lastMouseOpen != mouseOpenCount) {
+                            this.lastMouseOpen = mouseOpenCount;
+                            if(this.character.hasClass('talk')) {
+                                this.character.removeClass('talk');
+                                if(!this.talk) this.lastMouseOpen = -1;
+                            } else this.character.addClass('talk');
+                        }
+                    }
+                    //依序顯示字
+                    if(this.talk) {
+                        var count = Math.floor((time - this.startTalkTime) / 100);
+                        if(this.lastTalkCount != count) {
+                            this.lastTalkCount = count;
+                            var word = this.talk.slice(0, count);
+                            /*if(Object.keys(this.keyword).length > 0) {
+                                word = word.split('');
+                                for(var i in this.keyword)
+                                    if(word[i])
+                                        word[i] = '<span class="keyword">' + word[i] + '</span>';
+                                word = word.join('');
+                            }*/
+                            //////this.content.html(this.setKeyword(word)).scrollTop(99999);
+                            this.setContentAndScroll(this.setKeyword(word));
+                            if(count >= this.talk.length) this.setSpeaking(false);
+                        }
+                    }
+                },
+                setContent: function(content) {
+                    this.keyword = {};
+                    if(typeof content == 'object') {
+                        for(var i = 0; i < content[1].length; i++)
+                            this.keyword[content[0].length + i] = true;
+                        this.talk = content.join('');
+                    } else this.talk = content;
+                    this.setSpeaking(true);
+                },
+                setKeyword: function(word) {
+                    if(Object.keys(this.keyword).length > 0) {
+                        word = word.split('');
+                        for(var i in this.keyword)
+                            if(word[i])
+                                word[i] = '<span class="keyword">' + word[i] + '</span>';
+                        word = word.join('');
+                    }
+                    return word;
+                },
+                setContentAndScroll: function(text) {
+                    // var startScrollTop = this.content.scrollTop();
+                    this.content.html(text).scrollTop(0);
+                    // var endScrollTop = this.content.scrollTop();
+                    // if(startScrollTop != endScrollTop)
+                    //     this.content.stop().scrollTop(startScrollTop).animate({
+                    //         scrollTop: endScrollTop
+                    //     }, {
+                    //         duration: 500,
+                    //         easing: 'easeOutQuart'
+                    //     });
+                },
+                lastMouseOpen: -1,
+                setSpeaking: function(value) {
+                    if(value) {
+                        this.startTalkTime = this.time || 0;
+                        this.lastTalkCount = this.lastMouseOpen = 0;
+                        this.character.removeClass('talk'); //剛開始講 或 講完時 都把嘴巴合起來
+                        this.content.html('<span class="hidden">我</span>');
+                        this.panel.addClass('speaking');
+                    } else {
+                        delete this.talk;
+                        this.endTalkTime = this.time;
+                        this.panel.removeClass('speaking');
+                    }
+                },
+                setName: function(name) {
+                    this.name.children('span').text(name);
+                    var me = this;
+                    this.data.forEach(function(sentence, i) {
+                        if(sentence.content)
+                            if(typeof sentence.content == 'object')
+                                sentence.content.forEach(function(word, i2) {
+                                    me.data[i].content[i2] = word.replace('<name>', name);
+                                });
+                            else
+                                me.data[i].content = sentence.content.replace('<name>', name);
+                    });
+                },
+                setSource: function(data) {
+                    this.data = data;
+                    //this.next();
+                },
+                resize: function() {
+                    //console.log(this.chapterTitle.width())
+                    this.chapterPanel.css('transform', 'translate(-50%, -50%) scale(' + Math.min(1, ($(this.dom).outerWidth() - 20) / this.chapterTitle.width()) + ')');
+                    this.finishPanel.css('transform', 'translate(0%, 0%) scale(' + Math.min(1, ($(this.dom).outerWidth() - 20) / this.finishPanel.width()) + ')');
+                }
+            }.init();
+
+            window.scanner = {
+                dom: $('#scanner')[0],
+                //deviceId: '',
+                scanning: false,
+                scale: 1,
+                init: function() {
+                    this.codeReader = new ZXing.BrowserQRCodeReader();
+                    this.range = this.find('.range');
+                    this.capture = $('#capture')[0];
+                    this.captureContext = this.capture.getContext('2d');
+                    return this;
+                },
+                /*source: {},
+                setSource: function(source) {
+                    var me = this;
+                    for(var i in source) {
+                        var qrcode = source[i].qrcode;
+                        if(typeof qrcode == 'string') qrcode = [qrcode];
+                        qrcode.forEach(function(code) {
+                            me.source[code] = parseInt(i) + 1;
+                        });
+                    }
+                },*/
+                find: function(value) {
+                    return $(this.dom).find(value);
+                },
+                resume: function() {
+                    if($('#video')[0].paused)
+                        $('#video')[0].play();
+                },
+                //errorTimeout: null,
+                //timeout: null,
+                id: 1,
+                generateId: function() {
+                    this.id++;
+                    this.id %= 1000000;
+                },
+                start: function() {
+                    if(this.scanning) return;
+                    this.scanning = true;
+                    $(this.dom).addClass('show');
+                    //$('#video')[0].srcObject = this.stream;//可能不用，用resume就好
+                    this.generateId();
+                    this.scan(this.id);
+                    this.resize();
+                    if(!this.checkTimer) {
+                        var me = this;
+                        this.checkTimer = setInterval(function() {
+                            me.resume();
+                        }, 1000);
+                    }
+                },
+                stop: function() {
+                    if(!this.scanning) return;
+                    this.scanning = false;
+                    $(this.dom).removeClass('show');
+                    this.generateId();
+                },
+                scan: function(id) {
+                    //if(this.id != id) return;
+                    window.me = this;
+                    //console.log(id);
+                    //this.codeReader.stopAsyncDecode();
+                    //
+                    setTimeout(function() {
+                        if(me.id != id) return;
+                        //me.codeReader.stopAsyncDecode();
+                        //測試用
+                        if(urlData.debug == 'true') {
+                            me.stop();
+                            model.open(dialogue.checkFind('test'));
+                            return;
+                        }
+                        var video = $('#video')[0];
+                        var size = me.capture.width = me.capture.height = me.range.width();
+                        var newSize = size / me.scale;
+                        me.captureContext.drawImage(
+                            video,
+                            // source x, y, w, h:
+                            (video.videoWidth - newSize) / 2,
+                            (video.videoHeight - newSize) / 2,
+                            newSize,
+                            newSize,
+                            // dest x, y, w, h:
+                            0,
+                            0,
+                            size,
+                            size
+                        );
+                        //掃描到不完整的QRCode不會觸發result或error，所以要設Timeout
+                        var alreadyTimeout = false;
+                        var timeout = setTimeout(function() {
+                            if(me.id != id) return;
+                            alreadyTimeout = true;
+                            me.codeReader.stopAsyncDecode();
+                            /////////////////$(me.dom).removeClass('error');
+                            dialogue.checkFind();
+                            me.scan(id);
+                            //me.generateId();
+                            //me.scan(me.id);
+                        }, 500);
+                        me.codeReader.decodeFromImage(undefined, me.capture.toDataURL('image/jpeg'))
+                        .then((result) => {
+                            if(me.id != id) return;
+                            if(alreadyTimeout) return;
+                            clearTimeout(timeout);
+                            if(result && result.text) {
+                                //console.log(me.source[result.text])
+                                //console.log(result.text)
+                                ///log(result.text, true);
+                                /***if(me.source[result.text]) {
+                                    me.stop();
+                                    /////////////////$(me.dom).removeClass('error');
+                                    model.open(me.source[result.text]);
+                                    dialogue.next(true);
+                                } else {
+                                    /////////////////$(me.dom).addClass('error');
+                                    me.scan(id);
+                                }***/
+                                var foundModel = 0;
+                                if(foundModel = dialogue.checkFind(result.text)) {
+                                    console.log('foundModel',foundModel)
+                                    me.stop();
+                                    /////////////////$(me.dom).removeClass('error');
+                                    //model.open(me.source[result.text]);
+                                    
+                                    //掃描到QRcode
+                                    model.open(foundModel);
+
+                                } else me.scan(id);
+                            } else {
+                                ///log('', true);
+                                //console.log(result);
+                                //rescan();
+                                /////////////////$(me.dom).removeClass('error');
+                                dialogue.checkFind();
+                                me.scan(id);
+                            }
+                        }).catch((err) => {
+                            if(me.id != id) return;
+                            if(alreadyTimeout) return;
+                            clearTimeout(timeout);
+                            ///log('', true);
+                            //console.log(err);
+                            //rescan();
+                            /////////////////$(me.dom).removeClass('error');
+                            dialogue.checkFind();
+                            me.scan(id);
+                        });
+
+                    }, 500);
+                },
+                setError: function(error) {
+                    if(error) $(this.dom).addClass('error');
+                    else $(this.dom).removeClass('error');
+                },
+                /*rescan: function() {
+                    if(this.timeout)
+                        clearTimeout(this.timeout);
+                    this.timeout = null;
+                    this.scan();
+                },*/
+                resize: function() {
+                    //console.log(this.find('.title').outerHeight());
+                    var topBottom = Math.max(this.find('.title').outerHeight(), dialogue.getHeight()/*this.find('.info').outerHeight()*/) * 2;
+                    var size = Math.floor(Math.min($(this.dom).height() - topBottom, Math.min($(this.dom).width(), $(this.dom).height()) * 0.75));
+                    size = Math.max(size, 120);//不要太小，不然掃不到
+                    this.range.width(size).height(size);
+                    this.resume();
+                }
+            }.init();
+
+            window.model = {
+                mixer: null,
+                dom: $('#model')[0],
+                objLoader: new THREE.OBJLoader(),
+                fbxLoader: new THREE.FBXLoader(),
+                textureLoader: new THREE.AjaxTextureLoader(), //AjaxTextureLoader TextureLoader
+                animeRate: 0,
+                decache: new Date().getTime(),
+                id: 1,
+                generateId: function() {
+                    this.id++;
+                    return this.id %= 1000000;
+                },
+                init: function() {
+                    scene.add(this.parentGroup = new THREE.Group());
+                    this.parentGroup.add(this.group = new THREE.Group());
+                    this.parentGroup.visible = false;
+                    this.parentGroup.scale.set(0, 0, 0);
+                    var me = this;
+                    /*this.find('.find').click(function() {
+                        me.close();
+                        scanner.start();
+                    });*/
+                    this.find('.loading').click(function() {
+                        me.reload();
+                    });
+                    this.bar = new ProgressBar.Circle(this.find('.loading>div')[0], {
+                        strokeWidth: 0,
+                        //easing: 'easeInOut',
+                        color: '#FFFFFF',
+                        trailColor: 'transparent',
+                        trailWidth: 1,
+                        svgStyle: null,
+                        step: function(state, circle) {
+                            // circle.setText(Math.floor(Math.max(0, Math.min(1, circle.value())) * 100) + '%');
+                        }
+                    });
+                    //this.bar.set(0.3);
+                    //判定觸碰的面板
+                    this.plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(1, 1));
+                    this.plane.visible = false;
+                    scene.add(this.plane);
+                    this.initEvent();
+                    //
+                    //Shader
+                    this.vertexShader = [
+                        'varying vec2 vUv;',
+                        'void main( void ) {',
+                            'vUv = uv;',
+                            'gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);',
+                        '}'
+                    ].join('');
+                    /*this.fragmentShader = [
+                        'varying vec2 vUv;',
+                        'uniform sampler2D map;',
+                        'uniform vec2 scale;',
+                        'uniform vec2 offset;',
+                        'uniform float opacity;',
+                        'void main() {',
+                            //vec4 videoColor = texture2D(map, vUv * 0.333333 + 0.333333);
+                            //float scale = 1.0 / 3.0;
+                            //vec4 videoColor = texture2D(map, vUv * mat2(scale, 0.0, 0.0, scale) + );
+                            'vec4 videoColor = texture2D(map, vUv * vec2(scale.x, scale.y) + vec2(offset.x, offset.y));',
+                            //'if (blend < 0.5) discard;',
+                            ////'gl_FragColor = vec4(videoColor.rgb, videoColor.a * videoColorAlpha.r);',
+                            'gl_FragColor = vec4(videoColor.rgb, videoColor.rgb * opacity);',
+                        '}'
+                    ].join('');*/
+                    this.fragmentShader = [
+                        'varying vec2 vUv;',
+                        'uniform sampler2D map;',
+                        'uniform sampler2D fireMap;',
+                        'uniform sampler2D alphaMap;',
+                        'uniform vec2 scale;',
+                        'uniform float fire;',
+                        'void main() {',
+                            //vec4 videoColor = texture2D(map, vUv * 0.333333 + 0.333333);
+                            //float scale = 1.0 / 3.0;
+                            //vec4 videoColor = texture2D(map, vUv * mat2(scale, 0.0, 0.0, scale) + );
+                            'vec4 mapColor = texture2D(map, vUv);',
+                            'vec4 alphaColor = texture2D(alphaMap, vUv) * fire;',
+                            //'alphaColor = alphaColor * 2.0;',
+                            'vec4 fireColor = texture2D(fireMap, vUv) * 1.5;',
+                            //'if (blend < 0.5) discard;',
+                            ////'gl_FragColor = vec4(mapColor.rgb, mapColor.a);',
+                            'gl_FragColor = mapColor * (1.0 - alphaColor) + fireColor * alphaColor;',
+                        '}'
+                    ].join('');
+                    return this;
+                },
+                find: function(value) {
+                    return $(this.dom).find(value);
+                },
+                index: 1,
+                open: function(index) {
+                    this.index = index;
+                    //設定title的名稱(例如: 龍太子)
+                    // this.find('.title').text(this.source[index - 1].name);
+                    //var id = this.generateId();
+                    this.group.scale.set(1, 1, 1);
+                    //this.group.rotation.y = 0;
+                    if(this.mesh) {
+                        this.group.remove(this.mesh);
+                        this.dispose(this.mesh);
+                        delete this.mesh;
+                    }
+                    delete this.canDrag;
+                    $(this.dom).addClass('show');
+                    $(this).stop();//不然會呼叫到me.parentGroup.visible = false;
+                    this.parentGroup.visible = true;
+                    //
+                    this.reload();
+                },
+                close: function() {
+                    this.generateId();
+                    this.stopDrag();
+                    var me = this;
+                    $(this.dom).removeClass('show').find('.loading').removeClass('show');
+                    $(this).stop().animate({
+                        animeRate: 0
+                    }, {
+                        duration: 500,
+                        easing: 'easeOutQuart',
+                        step: function(now, e) {
+                            me.parentGroup.scale.set(now, now, now);
+                        },
+                        complete: function() {
+                            me.parentGroup.visible = false;
+                        }
+                    });
+                    /*$(this).stop();
+                    this.animeRate = 0;
+                    this.parentGroup.scale.set(0, 0, 0);
+                    this.parentGroup.visible = false;*/
+                },
+                dispose: function(object) {
+                    if(!object) return;
+                    try {
+                        if(object.children)
+                            object.children.forEach(child => {
+                                child.traverse(function(obj) {
+                                    if(obj.geometry) obj.geometry.dispose();
+                                    if(obj.material) obj.material.dispose();
+                                    if(obj.texture) obj.texture.dispose();
+                                });
+                            });
+                        if(typeof object.dispose == 'function') object.dispose();
+                    } catch (e) {
+                        //console.warn(e);
+                    }
+                },
+                load: function(list, onFinish, onProgress, onError) {
+    var id = this.id;
+    list = list || [];
+    var returnData = [];
+    var progressData = [];
+    var count = 0;
+    var alreadyError = false;
+    var me = this;
+
+    function progress(index, xhr) {
+        if(alreadyError) return;
+        if(me.id != id) return;
+        var loaded = Math.max(0, parseFloat(xhr.loaded) || 0);
+        var total = Math.max(0, parseFloat(xhr.total) || 0);
+        progressData[index] = {
+            loaded: Math.min(loaded, total),
+            total: total
+        };
+        loaded = 0;
+        progressData.forEach(function(e) {
+            loaded += e.loaded;
+        });
+        var allTotalReady = true;
+        total = 0;
+        progressData.forEach(function(e) {
+            if(e.total <= 0) allTotalReady = false;
+            total += e.total;
+        });
+        if(allTotalReady)
+            if(typeof onProgress == 'function') onProgress(loaded / total);
+    }
+
+    function complete(index, object) {
+        if(me.id != id || alreadyError) {
+            me.dispose(object);
+            return;
+        }
+        returnData[index] = object;
+        count++;
+        if(count == list.length)
+            if(typeof onFinish == 'function') onFinish(returnData);
+    }
+
+    function error() {
+        if(alreadyError) return;
+        if(me.id != id) return;
+        alreadyError = true;
+        if(typeof onError == 'function') onError();
+    }
+
+    list.forEach(function(name, index) {
+        var type = name.split('.').pop().toLowerCase();
+
+        if (type === 'zip') {
+            // 解壓縮 ZIP 檔案
+            fetch(name + '?decache=' + me.decache)
+                .then(response => response.arrayBuffer())
+                .then(buffer => JSZip.loadAsync(buffer))
+                .then(zip => {
+                    // 假設 ZIP 中只有一個 FBX 檔案
+                    return zip.file(/\.fbx$/i)[0].async('blob');
+                })
+                .then(fbxBlob => {
+                    var reader = new FileReader();
+                    reader.onload = function(event) {
+                        var arrayBuffer = event.target.result;
+                        var object = me.fbxLoader.parse(arrayBuffer);
+                        complete(index, object);
+                    };
+                    reader.readAsArrayBuffer(fbxBlob);
+                })
+                .catch(error);
+        } else {
+            switch (type) {
+                case 'obj':
+                    me.objLoader.load(name + '?decache=' + me.decache, function(object) {
+                        complete(index, object);
+                    }, function(xhr) {
+                        progress(index, xhr);
+                    }, error);
+                    break;
+
+                case 'fbx':
+                    me.fbxLoader.load(name + '?decache=' + me.decache, function(object) {
+                        complete(index, object);
+                    }, function(xhr) {
+                        progress(index, xhr);
+                    }, error);
+                    break;
+
+                case 'mp4':
+                    var video = document.createElement('video');
+                    video.src = name + '?decache=' + me.decache;
+                    video.loop = true;
+                    video.muted = true;
+                    video.play();
+                    var texture = new THREE.VideoTexture(video);
+                    complete(index, texture);
+                    break;
+
+                default:
+                    me.textureLoader.load(name + '?decache=' + me.decache + '_' + me.id, function(object) {
+                        complete(index, object);
+                    }, function(xhr) {
+                        progress(index, xhr);
+                    }, error);
+            }
+        }
+    });
+},
+
+                // reload: function() {
+                //     var me = this;
+                //     var id = this.generateId();
+                //     this.find('.loading').addClass('show').removeClass('error');
+                //     this.bar.set(0);
+                //     this.load(this.source[this.index - 1].source/*['model/' + this.index + '/mesh.obj', 'model/' + this.index + '/texture.jpg']*/, function(data) {
+                //         var mesh = me.mesh = new THREE.Group(); //me.mesh = data[0];
+                //         var source = me.source[me.index - 1];
+                //         var scale = source.scale || 1;
+                //         mesh.scale.set(scale, scale, scale);
+                //         mesh.position.set(0, source.y || 0/*-75*/, 0);
+                //         var material = new THREE.MeshBasicMaterial({
+                //             map: data[1],
+                //             side: THREE.DoubleSide
+                //         });
+                //         data[0].traverse(function(node) {
+                //             if(node.material)
+                //                 node.material = material;
+                //         });
+                //         mesh.add(data[0]);        
+                        
+                //         //SU 創建動畫
+                //         // 创建动画混合器并播放动画
+                //         if (data[0].animations && data[0].animations.length > 0) {
+                //             me.mixer = new THREE.AnimationMixer(data[0]);
+                //             var action = me.mixer.clipAction(data[0].animations[0]);
+                //             action.play();
+                //             me.mixer.timeScale = 10; // 将动画速度加快两倍
+                //         }
+
+                //         console.log('載入模型')
+                reload: function() {
+                    var me = this;
+                    var id = this.generateId();
+                    this.find('.loading').addClass('show').removeClass('error');
+                    this.bar.set(0);
+                    this.load(this.source[this.index - 1].source/*['model/' + this.index + '/mesh.obj', 'model/' + this.index + '/texture.jpg']*/, function(data) {
+
+                        var mesh = me.mesh = new THREE.Group(); //me.mesh = data[0];
+                        var source = me.source[me.index - 1];
+                        var scale = source.scale || 1;
+                        mesh.scale.set(scale, scale, scale);
+                        mesh.position.set(0, source.y || 0/*-75*/, 0);
+        
+                        // 使用卡通風格材質並減少亮度
+                        var material = new THREE.MeshToonMaterial({
+                            map: data[1],
+                            side: THREE.DoubleSide,
+                            color: 0xaaaaaa, // 減少亮度的顏色
+                            gradientMap: createGradientTexture() // 自定義漸變貼圖
+                        });
+        
+                        data[0].traverse(function(node) {
+                            if(node.material)
+                            node.material = material;
+                        });
+                        mesh.add(data[0]);   
+                         
+                        
+                        console.log(data)
+        
+                        //創建動畫
+                        if (data[0].animations && data[0].animations.length > 0) {
+                            me.mixer = new THREE.AnimationMixer(data[0]);
+                            // console.log('data[0]',data[0])
+                            Currentdata = data;
+                            me.mixer.timeScale = 1; // 將動畫速度加快
+                        }     
+                        
+
+                        // 設定3秒後切換動畫
+                        // setTimeout(function() {
+                        //     me.switchAnimation();
+                        // }, 3000);
+
+                        //====================================================================================================
+                        
+                        // data[2].traverse(function(node) {
+                        //     if(node.material)
+                        //     node.material = material;
+                        // });
+                        // mesh.add(data[2]);  
+
+                        // if (data[2].animations && data[2].animations.length > 0) {
+                        //     me.mixer = new THREE.AnimationMixer(data[2]);
+                        //     Currentdata = data;
+
+                        //     let action0 = me.mixer.clipAction(data[2].animations[0]);
+                        //     let action3 = me.mixer.clipAction(data[2].animations[3]);
+
+                        //     // 获取两个动画的最大持续时间
+
+                        //     let maxDuration = Math.max(action0.getClip().duration, action3.getClip().duration);
+                        //     // 设置两个动画的持续时间为最大持续时间
+                        //     action0.setDuration(maxDuration);
+                        //     action3.setDuration(maxDuration);
+                        //     setTimeout(() => {
+                        //         action0.play();
+                        //         action3.play();
+                        //     }, 10);
+                        //     me.mixer.timeScale = 10; // 将动画速度加快
+                        // }
+
+
+
+                        
+                        // 添加動畫
+        
+                        // if (data[2] && data[2].animations && data[2].animations.length > 0) {
+                        //     me.mixer = new THREE.AnimationMixer(data[0]);
+                        //     var action = me.mixer.clipAction(data[2].animations[0]);
+                        //     action.play();
+                        //     me.mixer.timeScale = 10; // 將動畫速度加快
+                        // }
+
+                        console.log('載入模型');
+
+                        // 創建自定義漸變貼圖函數
+                        function createGradientTexture() {
+   
+                            var canvas = document.createElement('canvas');
+                            canvas.width = 256;
+                            canvas.height = 1;
+
+                            var context = canvas.getContext('2d');
+                            var gradient = context.createLinearGradient(0, 0, 256, 0);
+                            gradient.addColorStop(0, '#000000'); // 漸變從黑色開始
+                            gradient.addColorStop(1, '#ffffff'); // 漸變到白色結束
+                            context.fillStyle = gradient;
+                            context.fillRect(0, 0, 256, 1);
+
+                            var texture = new THREE.CanvasTexture(canvas);
+                            texture.minFilter = THREE.NearestFilter;
+                            texture.magFilter = THREE.NearestFilter;
+                            return texture;
+                        }
+
+                                // 添加環境光和方向光
+                                // var ambientLight = new THREE.AmbientLight(0xffffff, 0.2); // 調低環境光強度
+                                // scene.add(ambientLight);
+
+                                // var directionalLight = new THREE.DirectionalLight(0xffffff, 0.2); // 調低方向光強度
+                                // directionalLight.position.set(0, 1, 1).normalize();
+                                // scene.add(directionalLight);
+
+
+                        switch(me.index) {
+                            //1龍太子
+                            case 1:                            
+                            // action = me.mixer.clipAction(data[0].animations[0]);
+                            //     action.play();
+                            //     // 保存 data[2] 以便稍後使用
+                            //     me.data2 = data[2];
+                            //     me.data2Material = material;
+                            //     FBX_Throw_me = me;
+
+                            //     me.mixer.timeScale = 5;
+
+                            //     console.log('我是me',me)
+                            action = me.mixer.clipAction(data[0].animations[0]);
+                            action.play();
+
+                                break;
+                                
+                            case 2:
+                            //2虎爺將軍
+                            // action = me.mixer.clipAction(data[0].animations[0]);
+                            // action.play();
+
+    // 這裡是 case 4 的處理
+    action = me.mixer.clipAction(data[0].animations[0]);
+    action.play();
+
+    // 創建圖片材質
+    var textureMaterial = new THREE.MeshToonMaterial({
+        map: data[1],  // texture.png
+        side: THREE.DoubleSide,
+        color: 0xaaaaaa, 
+        gradientMap: createGradientTexture()
+    });
+
+    // 創建 MP4 視頻材質
+    var video = document.createElement('video');
+    video.src = 'model/2/eyes.mp4';
+    video.loop = true;
+    video.muted = true;
+    video.play();
+
+    var videoTexture = new THREE.VideoTexture(video);
+    var videoMaterial = new THREE.MeshBasicMaterial({
+        map: videoTexture,
+        side: THREE.DoubleSide
+    });
+
+    // 遍歷 .fbx 文件中的子模型並應用材質
+    let meshIndex = 0;
+    data[0].traverse(function(node) {
+        if (node.isMesh) {
+            if (meshIndex === 0) {
+                // 第一個模型應用圖片材質
+                node.material = textureMaterial;
+            } else if (meshIndex === 3) {
+                // 第二個模型應用 MP4 視頻材質
+                node.material = videoMaterial;
+            }
+            meshIndex++;
+        }
+    });
+
+    // 添加模型到場景
+    // me.group.add(data[0]);
+
+    // 儲存第二個模型資料以便稍後使用
+    me.data2 = data[2];
+    me.data2Material = videoMaterial;
+    FBX_Throw_me = me;
+
+
+    console.log('我是me', me);
+
+    break;
+                                //圍棋
+                                // var position = [{
+                                //     x: -9.007,
+                                //     y: -6.873,
+                                //     z: 11.01
+                                // }, {
+                                //     x: -7.751,
+                                //     y: -8.093,
+                                //     z: 11.032
+                                // }, {
+                                //     x: -7.794,
+                                //     y: -4.596,
+                                //     z: 11.004
+                                // }, {
+                                //     x: -6.562,
+                                //     y: -8.108,
+                                //     z: 11.041,
+                                //     white: true
+                                // }, {
+                                //     x: -5.385,
+                                //     y: -6.887,
+                                //     z: 11.016,
+                                //     white: true
+                                // }, {
+                                //     x: -2.976,
+                                //     y: -8.073,
+                                //     z: 11.063
+                                // }, {
+                                //     x: -0.539,
+                                //     y: -6.884,
+                                //     z: 11.05,
+                                //     white: true
+                                // }, {
+                                //     x: 7.986,
+                                //     y: 6.994,
+                                //     z: 11.204
+                                // }, {
+                                //     x: 6.797,
+                                //     y: 8.114,
+                                //     z: 11.233
+                                // }, {
+                                //     x: 6.798,
+                                //     y: 4.613,
+                                //     z: 11.204
+                                // }, {
+                                //     x: 5.672,
+                                //     y: 8.12,
+                                //     z: 11.158,
+                                //     white: true
+                                // }, {
+                                //     x: 5.672,
+                                //     y: 6.936,
+                                //     z: 11.182,
+                                //     white: true
+                                // }, {
+                                //     x: 3.213,
+                                //     y: 5.822,
+                                //     z: 11.182,
+                                //     white: true
+                                // }, {
+                                //     x: 1.947,
+                                //     y: 8.114,
+                                //     z: 11.205
+                                // }, {
+                                //     x: -0.409,
+                                //     y: 6.943,
+                                //     z: 11.168
+                                // }];
+                                // var cheesList = [];
+                                // position.forEach(function(e, i) {
+                                //     var chess = new THREE.Mesh(new THREE.SphereGeometry(0.4, 20, 10), new THREE.MeshPhongMaterial({
+                                //         color: e.white ? '#111111' : '#000000',
+                                //         emissive: e.white ? '#AAAAAA' : '#000000',
+                                //         side: THREE.DoubleSide
+                                //     }));
+                                //     //var chess = data[2].clone();
+                                //     chess.position.set(e.x, e.z + 0.1, -e.y);
+                                //     //chess.position.set(-11.374, 11, -10.294);
+                                //     chess.scale.set(0, 0, 0);
+                                //     mesh.add(chess);
+                                //     chess.scsaleRate = 0;
+                                //     cheesList[i] = chess;
+                                // });
+                                // me.playChess = function() {
+                                //     cheesList.forEach(function(chess, i) {
+                                //         setTimeout(function() {
+                                //             //photoMaterial.opacity = 1;
+                                //             $(chess).animate({
+                                //                 scsaleRate: 1
+                                //             }, {
+                                //                 duration: 1000,
+                                //                 easing: 'easeOutBack',
+                                //                 step: function(now, e) {
+                                //                     if(chess) chess.scale.set(now, now * 0.3, now);
+                                //                 }
+                                //             });
+                                //         }, i * 200 + 1000);
+                                //     });
+                                //     setTimeout(function() {
+                                //         playSound('chess.mp3');
+                                //     }, 1000);
+                                // };
+                                break;
+                            case 3:
+                            // action = me.mixer.clipAction(data[0].animations[0]);
+                            // action.play();
+
+                            // action = me.mixer.clipAction(data[0].animations[0]);
+                            // action.play();
+                            // console.log('我是me', me);
+   
+                            break;
+                                //3鳳凰姐姐
+                                // var bird1Material = new THREE.MeshBasicMaterial({
+                                //     map: data[3],
+                                //     side: THREE.DoubleSide
+                                // });
+                                // data[2].traverse(function(node) {
+                                //     if(node.material)
+                                //         node.material = bird1Material;
+                                // });
+                                // mesh.add(data[2]);
+                                // var bird2Material = new THREE.MeshBasicMaterial({
+                                //     map: data[5],
+                                //     side: THREE.DoubleSide
+                                // });
+                                // data[4].traverse(function(node) {
+                                //     if(node.material)
+                                //         node.material = bird2Material;
+                                // });
+                                // mesh.add(data[4]);
+                                break;
+                            case 4:
+                            //4柑仔龜
+                            // action = me.mixer.clipAction(data[0].animations[0]);
+                            // action.play();
+
+                            //     // 保存 data[2] 以便稍後使用
+                            //     me.data2 = data[2];
+                            //     me.data2Material = material;
+                            //     FBX_Throw_me = me;
+
+                            //     console.log('我是me',me)
+                            //     break;
+
+                            //大鯖魚case 4:
+    // 這裡是 case 4 的處理
+    // action = me.mixer.clipAction(data[0].animations[0]);
+    // action.play();
+
+    // // 創建圖片材質
+    // var textureMaterial = new THREE.MeshToonMaterial({
+    //     map: data[1],  // texture.png
+    //     side: THREE.DoubleSide,
+    //     color: 0xaaaaaa, 
+    //     gradientMap: createGradientTexture()
+    // });
+
+    // // 創建 MP4 視頻材質
+    // var video = document.createElement('video');
+    // video.src = 'model/4/Eyestest.mp4';
+    // video.loop = true;
+    // video.muted = true;
+    // video.play();
+
+    // var videoTexture = new THREE.VideoTexture(video);
+    // var videoMaterial = new THREE.MeshBasicMaterial({
+    //     map: videoTexture,
+    //     side: THREE.DoubleSide
+    // });
+
+    // // 遍歷 .fbx 文件中的子模型並應用材質
+    // let meshIndex = 0;
+    // data[0].traverse(function(node) {
+    //     if (node.isMesh) {
+    //         if (meshIndex === 0) {
+    //             // 第一個模型應用圖片材質
+    //             node.material = textureMaterial;
+    //         } else if (meshIndex === 1) {
+    //             // 第二個模型應用 MP4 視頻材質
+    //             node.material = videoMaterial;
+    //         }
+    //         meshIndex++;
+    //     }
+    // });
+
+    // // 添加模型到場景
+    // me.group.add(data[0]);
+
+    // // 儲存第二個模型資料以便稍後使用
+    // me.data2 = data[2];
+    // me.data2Material = videoMaterial;
+    // FBX_Throw_me = me;
+
+    // console.log('我是me', me);
+
+    // action = me.mixer.clipAction(data[0].animations[0]);
+    // action.play();
+
+    // // 創建 eye.png 貼圖材質
+    // var eyeTexture = new THREE.TextureLoader().load('model/5/Eyes.png');
+    // var eyeMaterial = new THREE.MeshToonMaterial({
+    //     map: eyeTexture,
+    //     side: THREE.DoubleSide,
+    //     color: 0xaaaaaa, // 如果需要減少亮度，您可以調整這裡的顏色
+    //     gradientMap: createGradientTexture() // 自定義漸變貼圖，您之前已經定義過這個函數
+    // });
+
+    // // 遍歷 .fbx 文件中的子模型並應用材質
+    // let meshIndex4 = 0;
+    // data[0].traverse(function(node) {
+    //     if (node.isMesh) {
+    //         if (meshIndex4 === 0) {
+    //             // 第四個物件應用 eye.png 貼圖材質
+    //             node.material = eyeMaterial;
+    //         }
+    //         meshIndex4++;
+    //     }
+    // });
+
+    // // 添加模型到場景
+
+    // // 如果需要保存其他模型資料或材質以便稍後使用，可以像這樣處理
+    // me.data2 = data[2];
+    // me.data2Material = eyeMaterial;
+    // FBX_Throw_me = me;
+
+    // console.log('我是me', me);
+
+    break;
+
+                                //書桌
+                                // var transform = [{
+                                //     rate: 2169 / 2082,
+                                //     height: 3,
+                                //     x: 3.5,
+                                //     y: 2.7,
+                                //     rotation: 15
+                                // }, {
+                                //     rate: 2057 / 1631,
+                                //     height: 3,
+                                //     x: -4,
+                                //     y: 2.7,
+                                //     rotation: -5
+                                // }, {
+                                //     rate: 3237 / 4407,
+                                //     height: 4,
+                                //     x: 4,
+                                //     y: -3,
+                                //     rotation: 0
+                                // }, {
+                                //     rate: 2724 / 4125,
+                                //     height: 4,
+                                //     x: -3.5,
+                                //     y: -3,
+                                //     rotation: -10
+                                // }];
+                                // transform.forEach(function(e, i) {
+                                //     var photoMaterial = new THREE.MeshBasicMaterial({
+                                //         map: data[parseInt(i) + 2],
+                                //         transparent: true,
+                                //         opacity: 0
+                                //     });
+                                //     var photo = new THREE.Mesh(new THREE.PlaneGeometry(e.height * e.rate, e.height), photoMaterial);
+                                //     mesh.add(photo);
+                                //     photo.rotateX(-Math.PI / 2);
+                                //     photo.rotateZ(e.rotation * (Math.PI / 180));
+                                //     photo.position.set(e.x, 15.12, e.y);
+                                //     //window['aa'+(i+1)]=photo;
+                                //     setTimeout(function() {
+                                //         //photoMaterial.opacity = 1;
+                                //         $(photoMaterial).animate({
+                                //             opacity: 1
+                                //         }, {
+                                //             duration: 1000,
+                                //             easing: 'easeOutCubic'
+                                //         });
+                                //     }, parseInt(i) * 800 + 2000);
+                                // });
+                                break;
+                                case 5:
+    // 5麒麟
+    action = me.mixer.clipAction(data[0].animations[0]);
+    action.play();
+
+    // 創建 eye.png 貼圖材質
+    var eyeTexture = new THREE.TextureLoader().load('model/5/Eyes.png');
+    var eyeMaterial = new THREE.MeshToonMaterial({
+        map: eyeTexture,
+        side: THREE.DoubleSide,
+        color: 0xaaaaaa, // 如果需要減少亮度，您可以調整這裡的顏色
+        gradientMap: createGradientTexture() // 自定義漸變貼圖，您之前已經定義過這個函數
+    });
+
+    // 遍歷 .fbx 文件中的子模型並應用材質
+    let meshIndex5 = 0;
+    data[0].traverse(function(node) {
+        if (node.isMesh) {
+            if (meshIndex5 === 0) {
+                // 第四個物件應用 eye.png 貼圖材質
+                node.material = eyeMaterial;
+            }
+            meshIndex5++;
+        }
+    });
+
+    // 添加模型到場景
+
+
+    // 如果需要保存其他模型資料或材質以便稍後使用，可以像這樣處理
+    me.data2 = data[2];
+    me.data2Material = eyeMaterial;
+    FBX_Throw_me = me;
+
+    console.log('我是me', me);
+
+    break;
+
+                            case 6:
+                                //6鰲魚奶奶
+                                action = me.mixer.clipAction(data[0].animations[0]);
+    action.play();
+
+    // 創建 eye.png 貼圖材質
+    var eyeTexture = new THREE.TextureLoader().load('model/5/Eyes.png');
+    var eyeMaterial = new THREE.MeshToonMaterial({
+        map: eyeTexture,
+        side: THREE.DoubleSide,
+        color: 0xaaaaaa, // 如果需要減少亮度，您可以調整這裡的顏色
+        gradientMap: createGradientTexture() // 自定義漸變貼圖，您之前已經定義過這個函數
+    });
+
+    // 遍歷 .fbx 文件中的子模型並應用材質
+    let meshIndex6 = 0;
+    data[0].traverse(function(node) {
+        if (node.isMesh) {
+            if (meshIndex6 === 0) {
+                // 第四個物件應用 eye.png 貼圖材質
+                node.material = eyeMaterial;
+            }
+            meshIndex6++;
+        }
+    });
+
+    // 添加模型到場景
+
+
+    // 如果需要保存其他模型資料或材質以便稍後使用，可以像這樣處理
+    me.data2 = data[2];
+    me.data2Material = eyeMaterial;
+    FBX_Throw_me = me;
+
+    console.log('我是me', me);
+
+    break;
+                                //火爐
+                                //data[2].wrapS = data[2].wrapT = THREE.RepeatWrapping;
+                                //data[4].wrapS = data[4].wrapT = THREE.RepeatWrapping;
+                                //data[2].repeat.set(5, 5);
+                                /*var material = new THREE.MeshBasicMaterial({
+                                    map: data[2],
+                                    //color: '#CC00FF',
+                                    side: THREE.DoubleSide
+                                });*/
+                                // var material = new THREE.ShaderMaterial({
+                                //     //color: '#FFCC00',
+                                //     side: THREE.DoubleSide,
+                                //     //transparent: true,
+                                //     fire: 0,
+                                //     uniforms: {
+                                //         map: { value: data[2] },
+                                //         fireMap: { value: data[3] },
+                                //         alphaMap: { value: data[4] },
+                                //         //scale: { value: [1, 1] },
+                                //         fire: { value: 0 }
+                                //     },
+                                //     vertexShader: me.vertexShader,
+                                //     fragmentShader: me.fragmentShader
+                                // });
+                                // data[0].traverse(function(node) {
+                                //     //console.log(node)
+                                //     if(node.name != 'default' && node.material)
+                                //         node.material = material;
+                                // });
+                                // setTimeout(function() {
+                                //     //photoMaterial.opacity = 1;
+                                //     $(material).animate({
+                                //         fire: 1
+                                //     }, {
+                                //         duration: 10000,
+                                //         easing: 'easeOutQuad',
+                                //         step: function(now, e) {
+                                //             if(material) material.uniforms.fire.value = now;
+                                //         }
+                                //     });
+                                // }, 2000);
+                                /*var fireCount = me.fireSingleCount;
+                                me.fireStartTime = me.time;
+                                mesh.fire = [];
+                                mesh.add(mesh.fireOffsetGroup = new THREE.Group());
+                                for(var i = 0; i < 8; i++) {
+                                    var fire = mesh.fire[i] = {
+                                        material: new THREE.ShaderMaterial({
+                                            //color: '#FFCC00',
+                                            side: THREE.DoubleSide,
+                                            transparent: true,
+                                            uniforms: {
+                                                map: { value: data[2] },
+                                                //alphaMap: { value: fireTexture },
+                                                scale: { value: [1 / fireCount, 1 / fireCount] },
+                                                offset: { value: [0.0, 0.0] },
+                                                opacity: { value: 1 }
+                                            },
+                                            vertexShader: me.vertexShader,
+                                            fragmentShader: me.fragmentShader
+                                        }),
+                                        pivot: new THREE.Group(),
+                                        group: new THREE.Group(),
+                                        index: i
+                                    };
+                                    fire.pivot.add(fire.mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(25, 25), fire.material));
+                                    fire.mesh.position.set(0, 5, 0);
+                                    if(i % 2 == 0) fire.mesh.rotation.y = Math.PI;
+                                    fire.group.add(fire.pivot);
+                                    var offset = 1.5;
+                                    switch(i) {
+                                        case 0:
+                                            fire.pivot.position.set(offset, 0, offset);
+                                            break;
+                                        case 1:
+                                            fire.pivot.position.set(-offset, 0, offset);
+                                            break;
+                                        case 2:
+                                            fire.pivot.position.set(-offset, 0, -offset);
+                                            break;
+                                        case 3:
+                                            fire.pivot.position.set(offset, 0, -offset);
+                                            break;
+                                        case 4:
+                                            fire.pivot.position.set(offset, 0, 0);
+                                            break;
+                                        case 5:
+                                            fire.pivot.position.set(0, 0, offset);
+                                            break;
+                                        case 6:
+                                            fire.pivot.position.set(-offset, 0, );
+                                            break;
+                                        case 7:
+                                            fire.pivot.position.set(0, 0, -offset);
+                                            break;
+                                    }
+                                    fire.pivot.position.y = 5;
+                                    //fire.pivot.position.set(0, 5, 0);
+                                    mesh.fireOffsetGroup.add(fire.group);
+                                }*/
+                                break;
+                            case 7:
+                                //7金有蝠爺爺
+                                action = me.mixer.clipAction(data[0].animations[0]);
+    action.play();
+
+    // 創建 eye.png 貼圖材質
+    var eyeTexture = new THREE.TextureLoader().load('model/5/Eyes.png');
+    var eyeMaterial = new THREE.MeshToonMaterial({
+        map: eyeTexture,
+        side: THREE.DoubleSide,
+        color: 0xaaaaaa, // 如果需要減少亮度，您可以調整這裡的顏色
+        gradientMap: createGradientTexture() // 自定義漸變貼圖，您之前已經定義過這個函數
+    });
+
+    // 遍歷 .fbx 文件中的子模型並應用材質
+    let meshIndex7 = 0;
+    data[0].traverse(function(node) {
+        if (node.isMesh) {
+            if (meshIndex7 === 0) {
+                // 第四個物件應用 eye.png 貼圖材質
+                node.material = eyeMaterial;
+            }
+            meshIndex7++;
+        }
+    });
+
+    // 添加模型到場景
+
+    // 如果需要保存其他模型資料或材質以便稍後使用，可以像這樣處理
+    me.data2 = data[2];
+    me.data2Material = eyeMaterial;
+    FBX_Throw_me = me;
+
+    console.log('我是me', me);
+
+    break;
+                                break
+                            case 8:
+                                //8甲子大爺(螃蟹)
+                                // setTimeout(function() {
+                                //     playSound('clothes.mp3');
+                                // }, 500);                      
+                                action = me.mixer.clipAction(data[0].animations[0]);
+                                action.play();
+                                // 保存 data[2] 以便稍後使用
+                                me.data2 = data[2];
+                                me.data2Material = material;
+                                FBX_Throw_me = me;
+
+                                console.log('我是me',me)
+                                break;
+                            case 9:
+                                //9仙鶴一品文官
+                                action = me.mixer.clipAction(data[0].animations[0]);
+                                action.play();
+                                // setTimeout(function() {
+                                //     playSound('eat.mp3');
+                                // }, 2000);
+                                /*var transform = [{
+                                    x: 0,
+                                    y: -6,
+                                    rotation: 15
+                                }, {
+                                    x: 6.33,
+                                    y: -1.42,
+                                    rotation: -5
+                                }, {
+                                    x: 3.91,
+                                    y: 6.02,
+                                    rotation: 0
+                                }, {
+                                    x: -3.91,
+                                    y: 6.02,
+                                }, {
+                                    x: -6.33,
+                                    y: -1.42,
+                                    rotation: 5
+                                }, {
+                                    x: 0,
+                                    y: 0,
+                                    rotation: 0
+                                }];*/
+                                // var foodList = [{
+                                //     x: 0,
+                                //     y: -5.5,
+                                //     color: '#4F4843'
+                                // }, {
+                                //     x: -5,
+                                //     y: 3
+                                // }, {
+                                //     x: 5,
+                                //     y: 3
+                                // }];
+                                // foodList.forEach(function(e, i) {
+                                //     var foodMaterial = new THREE.MeshBasicMaterial({
+                                //         map: data[parseInt(i) * 2 + 3],
+                                //         //alphaMap: data[parseInt(i) * 2 + 3],
+                                //         alphaTest: i == 2 ? 0.7 : 0,
+                                //         side: THREE.DoubleSide
+                                //     });
+                                //     var dishMaterial = new THREE.MeshPhongMaterial({
+                                //         color:  e.color || '#3F3A32',
+                                //         emissive: e.color || '#3F3A32',
+                                //         shininess: 100,
+                                //         side: THREE.DoubleSide
+                                //     });
+                                //     var food = data[parseInt(i) * 2 + 2];
+                                //     var dish = true;
+                                //     food.traverse(function(node) {
+                                //         if(node.material) {
+                                //             node.material = dish ? dishMaterial : foodMaterial;
+                                //             dish = false;
+                                //         }
+                                //     });
+                                //     food.scale.set(0, 0, 0);
+                                //     food.position.set(e.x, 15.11, e.y);
+                                //     mesh.add(food);
+                                //     //aa=data[2];
+                                //     food.scsaleRate = 0;
+                                //     setTimeout(function() {
+                                //         //photoMaterial.opacity = 1;
+                                //         $(food).animate({
+                                //             scsaleRate: 0.2
+                                //         }, {
+                                //             duration: 1000,
+                                //             easing: 'easeOutBack',
+                                //             step: function(now, e) {
+                                //                 if(food) food.scale.set(now, now, now);
+                                //             }
+                                //         });
+                                //     }, parseInt(i) * 800 + 2000);
+                                // });
+                                //foodMaterial.position.set(e.x, 15.12, e.y);
+                                break;
+                        }
+                        me.group.rotation.y = camera.rotation.y; //朝向使用者
+                        $(me.dragOffset).stop();
+                        me.dragOffset.x = me.dragOffset.y = 0;
+                        me.group.add(mesh);
+                        //
+                        setTimeout(function() {
+                            if(me.id != id) return;
+                            me.canDrag = true;
+                            me.find('.loading').removeClass('show');
+                            $(me).stop().animate({
+                                animeRate: 1
+                            }, {
+                                duration: 1000,
+                                easing: 'easeOutBack',
+                                step: function(now, e) {
+                                    me.parentGroup.scale.set(now, now, now);
+                                },
+                                complete: function() {
+                                    setTimeout(function() {
+                                        if(me.id != id) return;
+
+                                        if(!CollectARMode){
+
+                                        //載入完成模型第一個對話
+                                        dialogue.next(true);
+
+                                        //share
+                                        //Q&A
+                                        //paper rock scissors
+                                        //animation
+
+                                        //選擇遊玩的類型
+                                        Currentmodel = model;
+                                        var modelData = model.source[foundARIndex];
+                                        var CurrentGameType = modelData.gameType;
+                                        GameTime.SelectedGame(CurrentGameType, mesh);
+                                        }else{
+                                            // CollectARMode = false;
+                                        }
+
+                                    }, /*me.index == 2 ? 6000 : */1000);//圍棋結束後要切換到第3章，所以要停久一點
+                                }
+                            });
+                        }, 200);
+                    }, function(value) {
+                        //這邊跑讀取幾%
+                        me.bar.set(value);
+                    }, function() {
+                        setTimeout(function() {
+                            if(me.id != id) return;
+                            me.bar.set(0);
+                            me.find('.loading').addClass('error').find('.progressbar-text').text('讀取失敗');
+                        }, 200);
+                    });
+                },
+                switchAnimation: function(first_animindex,Second_animindex) {
+                    var me = this;
+                    // 停止並移除 data[0] 的動畫
+                    if (me.mixer) {
+                        me.mixer.stopAllAction();
+                    }
+                    me.mesh.remove(me.mesh.children[0]);
+                    // 加載並顯示 data[2]
+                    me.data2.traverse(function(node) {
+                        if (node.material) node.material = me.data2Material;
+                    });
+   
+                    me.mesh.add(me.data2);
+                    // 創建 data[2] 的動畫
+    
+                    if (me.data2.animations && me.data2.animations.length > 0) {
+                        me.mixer = new THREE.AnimationMixer(me.data2);
+
+                        let action0 = me.mixer.clipAction(me.data2.animations[first_animindex]);
+                        let action3 = me.mixer.clipAction(me.data2.animations[Second_animindex]);
+     
+                        // 获取两个动画的最大持续时间     
+                        let maxDuration = Math.max(action0.getClip().duration, action3.getClip().duration);
+
+                        // 设置两个动画的持续时间为最大持续时间
+                        action0.setDuration(maxDuration);
+                        action3.setDuration(maxDuration);
+     
+                        setTimeout(() => {
+                            action0.play();
+                            action3.play();
+                        }, 10);
+
+                        if(foundARIndex + 1 == 1){
+                            me.mixer.timeScale = 1;
+                        }else{
+                            me.mixer.timeScale = 1;
+                        }
+                        // 将动画速度加快
+                    }
+                },
+                initEvent: function() {
+                    var me = this;
+                    var drag = null;
+                    this.stopDrag = function() {
+                        drag = null;
+                    };
+                    function initDrag(e) {
+                        var point = touchCenter(e);
+                        var planePoint = me.unprojectPlan(point.x, point.y);
+                        drag = {
+                            x: point.x,
+                            planeX: planePoint.x,
+                            planeY: planePoint.y,
+                            offsetX: me.dragOffset.x,
+                            offsetY: me.dragOffset.y,
+                            //y: e[0].pageY,
+                            rotation: me.group.rotation.y,
+                            //imageY: imageTransform.y,
+                            distance: touchDistance(e),
+                            scale: me.group.scale.x
+                        };
+                    }
+                    function touchCenter(e) {
+                        if(e.length >= 2)
+                            return {
+                                x: (e[0].pageX + e[1].pageX) / 2,
+                                y: (e[0].pageY + e[1].pageY) / 2
+                            };
+                        return {
+                            x: e[0].pageX,
+                            y: e[0].pageY,
+                        };
+                    }
+                    function touchDistance(e) {
+                        if(e.length < 2) return 0;
+                        var deltaX = e[1].pageX - e[0].pageX;
+                        var deltaY = e[1].pageY - e[0].pageY;
+                        return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                    }
+                    function setScale(scale) {
+                        me.group.scale.set(scale, scale, scale);
+                    }
+                    function checkRange() {
+                        var over = false;
+                        if(me.group.scale.x < 0.4) {
+                            setScale(0.4);
+                            over = true;
+                        }
+                        if(me.group.scale.x > 4) {
+                            setScale(4);
+                            over = true;
+                        }
+                        return over;
+                    }
+                    //Touch
+                    this.find('.event').on('touchstart', function(e) {
+                        dialogue.passChapter();
+                        if(!me.canDrag) return;
+                        e = e.originalEvent;
+                        e.preventDefault();
+                        $(me.dragOffset).stop();
+                        initDrag(e.touches);
+                        //me.dragOffset = me.unprojectPlan(e.touches[0].pageX, e.touches[0].pageY);
+                    });/*.on('mousedown', function(e) {
+                        dialogue.passChapter();
+                        //var object = me.unproject(e.pageX, e.pageY, [me.plane]);
+                        //me.dragOffset = me.unprojectPlan(e.pageX, e.pageY);
+                        //console.log(object);
+                    });*/
+                    $(document).on('touchmove', function(e) {
+                        if(!drag) return;
+                        e = e.originalEvent.touches;
+                        if(e.length >= 2) {
+                            //縮放
+                            if(drag.distance > 0)
+                                setScale(drag.scale * (touchDistance(e) / drag.distance));
+                            //移動
+                            var point = touchCenter(e);
+                            var planePoint = me.unprojectPlan(point.x, point.y);
+                            me.dragOffset.x = (planePoint.x - drag.planeX) + drag.offsetX;
+                            me.dragOffset.y = (planePoint.y - drag.planeY) + drag.offsetY;
+                            //
+                            if(checkRange()) initDrag(e);
+                        } else
+                            me.group.rotation.y = (touchCenter(e).x - drag.x) * 0.015 + drag.rotation;
+                        //log(imageTransform.x,true);
+                    }).on('touchend', function(e) {
+                        e = e.originalEvent.touches;
+                        if(e.length > 0) initDrag(e);
+                        else {
+                            drag = null;
+                            me.checkOutOfRange();
+                        }
+                    });
+                    //Mouse
+                    $(this.dom).on('mousewheel', function(event) {
+                        if(!me.canDrag) return;
+                        var scale = me.group.scale.x;
+                        scale *= Math.pow(event.deltaY > 0 ? 1.1 : 0.9, Math.abs(event.deltaY));
+                        setScale(scale);
+                        checkRange();
+                        //camera.translateZ(-event.deltaY * 20);
+                    });
+                    this.find('.event').on('mousedown', function(e) {
+                        //dialogue.passChapter();
+                        if(!me.canDrag) return;
+                        if(drag) return;
+                        e = e.originalEvent;
+                        e.preventDefault();
+                        $(me.dragOffset).stop();
+                        initDrag([e]);
+                    });
+                    $(document).on('mousemove', function(e) {
+                        if(!drag) return;
+                        e = e.originalEvent;
+                        if(e.which == 3) {
+                            //移動
+                            var point = touchCenter([e]);
+                            var planePoint = me.unprojectPlan(point.x, point.y);
+                            me.dragOffset.x = (planePoint.x - drag.planeX) + drag.offsetX;
+                            me.dragOffset.y = (planePoint.y - drag.planeY) + drag.offsetY;
+                            //log(me.dragOffset.x + ' , ' + me.unprojectPlan(0, 0).x, true);
+                            //var range = me.unprojectPlan(0, 0);
+                            //log((me.dragOffset.x < range.x || me.dragOffset.x > -range.x || me.dragOffset.y < -range.y || me.dragOffset.y > range.y),true)
+                        } else me.group.rotation.y = (e.pageX - drag.x) * 0.015 + drag.rotation;
+                        //if(checkRange()) initDrag([e]);
+                    }).on('mouseup', function(e) {
+                        drag = null;
+                        me.checkOutOfRange();
+                    });
+                },
+                setSource: function(source) {
+                    for(var i in source) {                        
+                        source[i].id = parseInt(i) + 1;
+                        source[i].source = source[i].source || ['mesh.fbx', 'texture.png'];
+                        for(var i2 in source[i].source)
+                            source[i].source[i2] = 'model/' + (parseInt(i) + 1) + '/' + source[i].source[i2];
+                        //QR Code
+                        var qrcode = source[i].qrcode;
+                        source[i].qrcode = [];
+                        if(typeof qrcode == 'string') qrcode = [qrcode];
+                        qrcode.forEach(function(code) {
+                            source[i].qrcode[code] = true;
+                        });
+                    }
+                    this.source = source;
+                },
+                fireSingleCount: 7,
+                fireStartTime: 0,
+                easeOutCubic: function (t) { return 1-(--t)*t*t*t; },
+                easeInCubic: function (t) { return t*t*t; },
+                dragOffset: {
+                    x: 0,
+                    y: 0
+                },
+                update: function(time) {
+                    this.time = time;
+
+                    //SU 創建動畫
+                    const delta = clock.getDelta();
+                    if (this.mixer) this.mixer.update(delta);
+                    //加上拖曳後的座標
+                    this.group.position.set(0, 0, 0);
+                    var copyRotation = this.group.rotation.clone();
+                    this.group.rotation.copy(camera.rotation);
+                    this.group.translateX(this.dragOffset.x);
+
+                    // if(GameType == 'paper rock scissors'){
+                    //   this.group.translateY(15);
+                    // }else{
+                    //   this.group.translateY(this.dragOffset.y);
+                    // }
+                    this.group.translateY(this.dragOffset.y);
+                    this.group.rotation.copy(copyRotation);
+                    //
+                    /*if(this.mesh && this.mesh.fire) {
+                        var me = this;
+                        var fireCount = this.fireSingleCount;
+                        var count = fireCount * fireCount;
+                        var pitch = Math.min(0, camera.rotation.x * (180 / Math.PI));
+                        this.mesh.fireOffsetGroup.position.y = -pitch * 0.13;
+                        this.mesh.fire.forEach(function(fire) {
+                            //var fireIndex = (Math.floor((time - me.fireStartTime) / 33) + Math.floor(fire.index * count / me.mesh.fire.length)) % count;
+                            var fireIndex = ((time - me.fireStartTime) / 33 + fire.index * count / me.mesh.fire.length) % count;
+                            //var fireIndex = Math.floor(rate * count);
+                            var rate = fireIndex / count;
+                            rate *= 1.5;
+                            if(rate > 1) rate = me.easeInCubic(1 + (1 - rate) * 2);
+                            else rate = me.easeOutCubic(rate);
+                            //console.log(rate)
+                            fire.material.uniforms.opacity.value = rate;//me.easeOutCubic(rate);
+                            fireIndex = Math.floor(fireIndex);
+                            fire.material.uniforms.offset.value = [1 / fireCount * (fireIndex % fireCount) , 1 / fireCount * (fireCount - 1 - Math.floor(fireIndex / fireCount))];
+                            fire.pivot.quaternion.copy(camera.quaternion);
+                            fire.group.rotation.y = -me.group.rotation.y;
+                        });
+                    }*/
+                },
+                //判定拖曳有沒有超出範圍
+                unprojectPlan: function(x, y) {
+                    var newX = x * deviceRatio - renderer.getContext().canvas.width / 2;
+                    var newY = y * deviceRatio - renderer.getContext().canvas.height / 2;
+                    return {
+                        x: newX * this.plane.unprojectRate,
+                        y: newY * -this.plane.unprojectRate
+                    };
+                },
+                checkOutOfRange: function() {
+                    var range = this.unprojectPlan(0, 0);
+                    if(this.dragOffset.x < range.x || this.dragOffset.x > -range.x || this.dragOffset.y > range.y || this.dragOffset.y < -range.y) {
+                        //this.dragOffset.x = Math.max(range.x, Math.min(-range.x, this.dragOffset.x));
+                        //this.dragOffset.y = Math.max(-range.y, Math.min(range.y, this.dragOffset.y));
+                        $(this.dragOffset).stop().animate({
+                            x: Math.max(range.x, Math.min(-range.x, this.dragOffset.x)),
+                            y: Math.max(-range.y, Math.min(range.y, this.dragOffset.y))
+                        }, {
+                            duration: 500,
+                            easing: 'easeOutExpo'
+                        });
+                    }
+                },
+                unproject: function(x, y, meshList) {
+                    var width = renderer.getContext().canvas.width;
+                    var height = renderer.getContext().canvas.height;
+                    ///if (!girlMesh || !letterMesh || !plan) return null;
+                    var newX = x * deviceRatio - width / 2;
+                    var newY = y * deviceRatio - height / 2;
+                    //console.warn(newX+','+newY);
+                    var raycaster = new THREE.Raycaster();
+                    raycaster.setFromCamera(new THREE.Vector2(newX / (width / 2), -newY / (height / 2)), camera);
+                    //var intersects = raycaster.intersectObjects(scene.children, false);
+                    var intersects = raycaster.intersectObjects(meshList, true);
+                    if (intersects[0]) {
+                        intersects[0].newPoint = {
+                            x: newX,
+                            y: newY
+                        };
+                        return intersects[0];
+                    }
+                    return null;
+                    //return intersects[0] ? intersects[0] : null;
+                },
+                resize: function() {
+                    //console.log($('#three').width() * deviceRatio, renderer.getContext().canvas.width)
+                    //console.log(deviceRatio);
+                    var copyPosition = camera.position.clone();
+				    var copyRotation = camera.rotation.clone();
+                    camera.position.set(0, 0, camera.targetDistance);
+				    camera.rotation.set(0, 0, 0);
+                    //this.plane.quaternion.copy(camera.quaternion);
+                    ///this.plane.rotation.copy(camera.rotation);
+                    this.plane.visible = true;
+                    this.plane.scale.set(renderer.getContext().canvas.width * 10, renderer.getContext().canvas.height * 10, 1);
+                    renderer.render(scene, camera);
+                    var object = this.unproject(0, 0, [this.plane]);
+                    if (object && object.object) this.plane.unprojectRate = object.point.x / object.newPoint.x;
+                    this.plane.visible = false;
+                    camera.position.copy(copyPosition);
+                    camera.rotation.copy(copyRotation);
+                    renderer.render(scene, camera);
+                    this.checkOutOfRange();
+                }
+            }.init();
+
+            //playSound=function(file){
+            function playSound(file) {
+                $('#sound source').attr('src', 'sound/' + file + '?decache=' + new Date().getTime());
+                $('#sound')[0].load();
+                $('#sound')[0].play();
+            }
+
+            //event
+            //var clock = new THREE.Clock();
+            var controls = new THREE.DeviceOrientationControls(camera, true);
+            controls.connect();
+
+            //resize
+            function resize() {
+                //if($('video')[0] && $('video')[0].resize) $('video')[0].resize();
+                var w = $(three).width();
+                var h = $(three).height();
+                //
+                //resizeVideo();
+                //
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                //
+                camera2D.left = -w / 2;
+                camera2D.right = w / 2;
+                camera2D.top = h / 2;
+                camera2D.bottom = -h / 2;
+                camera2D.updateProjectionMatrix();
+                //camera2D.position.z = 10;
+                //
+                renderer.setSize(w, h);
+                render();
+                //
+                scanner.resize();
+                dialogue.resize();
+                model.resize();
+                $('#start-page .title').css('transform', 'scale(' + Math.min(1, ($('#start-page').outerWidth() - 40) / $('#start-page .title').width()) + ')');
+            }
+            function resizeVideo() {
+                if(videoPlane && $('#video')[0].videoWidth > 0 && $('#video')[0].videoHeight > 0) {
+                    /*var w = $(three).width();
+                    var h = $(three).height();
+                    videoPlane.scale.set(w, h);*/
+                    var w = $('#video')[0].videoWidth;
+                    var h = $('#video')[0].videoHeight;
+                    var w2 = $('#three').width();
+                    var h2 = $('#three').height();
+                    var rate = scanner.scale = w / h < w2 / h2 ? w2 / w : h2 / h;
+                    videoPlane.scale.set(w * rate, h * rate);
+                    //
+                    //$('#log').text(w + ',' + h);
+                }
+            }
+            window.addEventListener('resize', resize, false);
+            window.addEventListener('orientationchange', function() {
+                if (!!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform))
+                    setTimeout(function() {
+                        resize();
+                    }, 500);
+                else resize();
+            }, false);
+            resize();
+
+            //update
+            function update(t) {
+                t = t || 0;
+                if(isMobile) {
+                    controls.update();
+                    camera.position.set(0, 0, 0);
+					camera.translateZ(camera.targetDistance);
+                }
+                //lightGroup.rotation.copy(camera.rotation);
+                lightGroup.rotation.y = camera.rotation.y;
+                //var deltaTime = clock.getDelta();
+                //lightGroup.rotateY(-deltaTime * 0.5);
+                dialogue.update(t);
+                model.update(t);
+                resizeVideo();
+                render();
+                requestAnimationFrame(update);
+            }
+            //render
+            function render() {
+                //renderer.clear();
+                renderer.render(scene2D, camera2D);
+                renderer.clearDepth();
+                renderer.render(scene, camera);
+            }
+
+            //讀取資料
+            setMessage('請稍後...');
+            $.ajax({
+                url: 'source.json?decache=' + new Date().getTime(),
+                type: 'GET',
+                dataType: 'json',
+                timeout: 20000,
+                success: function(data) {
+                    $('#model .vignette').on('load', function() {
+                        $('#dialogue .character .head1').on('load', function() {
+                            $('#dialogue .character .head2').on('load', function() {
+                                $('#dialogue .background .default').on('load', function() {
+                                    $('#dialogue .background .top').on('load', function() {
+                                        $('#dialogue .background .bottom').on('load', function() {
+                                            //model.source = data;
+                                            model.setSource(data.model);
+                                            //scanner.setSource(data.model);
+                                            dialogue.setSource(data.dialogue);
+                                            setMessage();
+                                            requestPermission();
+                                        }).on('error', function() {
+                                            setMessage('無法讀取圖片');
+                                        }).attr('src', 'dialogue2.png');
+                                    }).on('error', function() {
+                                        setMessage('無法讀取圖片');
+                                    }).attr('src', 'dialogue1.png');
+                                }).on('error', function() {
+                                    setMessage('無法讀取圖片');
+                                }).attr('src', 'dialogue.png?decache=1');
+                            }).on('error', function() {
+                                setMessage('無法讀取圖片');
+                            }).attr('src', 'character2.png?decache=1');
+                        }).on('error', function() {
+                            setMessage('無法讀取圖片');
+                        }).attr('src', 'character1.png?decache=1');
+                    }).on('error', function() {
+                        setMessage('無法讀取圖片');
+                    }).attr('src', 'vignette.png');
+                },
+                error: function(e) {
+                    setMessage('無法讀取資料');
+                }
+            });
+
+            //SU 創建動畫
+            // 创建时钟并启动动画循环
+            const clock = new THREE.Clock();
+            function animate() {
+                requestAnimationFrame(animate);
+                var time = clock.getElapsedTime();
+                model.update(time);
+                renderer.render(scene, camera);
+            }
+            animate();
+            /*$('#restart').click(function() {
+                log($('#video')[0].srcObject);
+                $('#video')[0].srcObject = aaaaaa;
+            })*/
+
+
+        });
+    </script>
+</head>
+
+<body>
+
+    <div class="header-container">
+        <!-- <div class="MapButton">地圖</div> -->
+        <!-- <div class="CardButton">祈福卡</div> -->
+        <div class="MenuButton">選單</div>
+        <!-- <div class="BeastName">神獸收藏夾</div> -->
+        <!-- <div class="CollectButton">收藏夾</div> -->
+        <div class="CollecReturnimg">返回</div>
+        
+    </div>
+    <div class="TakePhoto"></div>
+    
+    <div id="map">
+        <div id="mapContainer">
+            <img id="mapImage" src="UI/RealMap.png" alt="Map">
+        </div>
+    </div>
+
+    <div class="Share-container">
+        <div class="FBShareButton"></div>
+        <div class="IGShareButton"></div>
+        <div class="TKagainButton"></div>
+    </div>
+
+    <div class="CollectBG">
+        <div class="Collecimg-container">
+            <div class="Collecimg">
+                <!-- <div class="text-below">文昌帝君</div> -->
+                <div class="CollectLoadMesh">與神獸合照</div>             
+            </div>
+        </div>
+        
+        <div class="grid-container">
+            <div class="grid-item dimmed">1<div class="beast-icon" id="beastIcon1" style="background-image: url('UI/Dragon.png');"></div></div>
+            <div class="grid-item dimmed">2<div class="beast-icon" id="beastIcon2" style="background-image: url('UI/Triger.png');"></div></div>
+            <div class="grid-item dimmed">3<div class="beast-icon" id="beastIcon3" style="background-image: url('UI/Phoenix.png');"></div></div>
+            <div class="grid-item dimmed">4<div class="beast-icon" id="beastIcon4" style="background-image: url('UI/Turtle.png');"></div></div>
+            <div class="grid-item dimmed">5<div class="beast-icon" id="beastIcon5" style="background-image: url('UI/Kirin.png');"></div></div>
+            <div class="grid-item dimmed">6<div class="beast-icon" id="beastIcon6" style="background-image: url('UI/whale.png');"></div></div>
+            <div class="grid-item dimmed">7<div class="beast-icon" id="beastIcon7" style="background-image: url('UI/Bat.png');"></div></div>
+            <div class="grid-item dimmed">8<div class="beast-icon" id="beastIcon8" style="background-image: url('UI/Crab.png');"></div></div>
+            <div class="grid-item dimmed">9<div class="beast-icon" id="beastIcon9" style="background-image: url('UI/Bird.png');"></div></div>
+        </div>
+        <div class="OfficialWebButton">了解更多</div>
+    </div>
+
+    <div class="CardBG">
+        <div class="content-container">
+          <div class="card left-card" data-download-url="UI/Crad_Black.png">
+            心願祈福卡 
+          </div>
+          <div class="card right-card" data-download-url="UI/Crad_Black.png">
+            驚喜神秘卡
+          </div>
+        </div>
+        <div class="cardownload_Font">收藏到的祈福卡可以下載下來喔！</div>
+      </div>
+      <div class="notification-container">
+        <div class="notification-img"></div>
+        <div id="notification" class="notification"></div>
+          <!-- 通知内容 -->
+        </div>
+      </div>
+    <div class="QuizCanvas">
+        <div class="QuizSize">
+            
+            <div class="progress">
+                <div class="progress--bar"></div>
+              </div>
+              
+              <h1></h1>
+              
+              <div class="questionArea">
+                <div class="question">...</div>
+              </div>
+              <div class="options"></div>
+              
+              <div class="scoreArea">
+                <img src="https://img.icons8.com/color/96/26e07f/checked--v4.png" class="prizeImage" />
+                <p>Finish!</p>
+                <hr />
+                <div class="scoreText1">--</div>
+                <div class="scorePct">--</div>
+                <div class="scoreText2">--</div>
+                <button>Retry</button>
+              </div>
+              <!-- partial -->
+                
+        </div>
+    </div>
+
+    <div class="PaperRockScissorsCanvas">
+        <div class="PaperRockScissorsSize">
+            <div class="stonePaperCut">
+                <button class="scissors" onclick="playNow(0)">
+                    <div class="icon"></div>
+                </button>
+                <button class="rock" onclick="playNow(1)">
+                    <div class="icon"></div>
+                </button>
+                <button class="paper" onclick="playNow(2)">
+                    <div class="icon"></div>
+                </button>
+            </div>
+            <div class="resultHere">
+                <div id="aHere" style="background-image: url('UI/fit.png'); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+                <div id="bHere" style="background-image: url('UI/fit.png'); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+            </div>
+        </div>
+    </div>
+    
+    
+
+    <div class="VideoCanvas">
+        <div class="VideoSize">
+
+                <!-- <input type="text" class="one" id="video-url" placeholder="Enter a cool video URL" value="https://github.com/juxtopposed/codepen/blob/main/videoplayback.mp4?raw=true"> -->
+                <button id="load-button" class="videobutton" type="button">投擲！</button>
+
+            <!-- MAIN SECTION FOR PLAY BUTTON -->
+            <div id="video-container">
+                <video id="gamevideo" preload="metadata">
+                    <source id="video-source" type="video/mp4">
+                </video>
+                <button id="play-button" type="button"><span class="play-icon"><i class="fa fa-solid fa-play"></i></span></button>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+    <canvas id="capture"></canvas>
+    <video id="video" autoplay muted playsinline></video>
+
+
+    <div id="three"></div>
+
+    <div class="photocontainer" tabIndex="0">
+        
+        <div class="photo"></div>
+      
+        <div class="instructions"></div>
+        <div class="shutter" style="--flaps: 6">
+          <div class="flap" style="--i: 0"></div>
+          <div class="flap" style="--i: 1"></div>
+          <div class="flap" style="--i: 2"></div>
+          <div class="flap" style="--i: 3"></div>
+          <div class="flap" style="--i: 4"></div>
+          <div class="flap" style="--i: 5"></div>
+        </div>
+    </div>
+    <div id="model">
+        <img class="vignette" style="opacity: 0;">
+        <div class="event" oncontextmenu="return false;"></div>
+        <div class="title"></div>
+        <div class="loading">
+            <div class="cloud-loading"></div>
+            <div class="loading-text">請稍後...</div>
+        <div>
+        </div>
+    </div>
+        
+        <!--<button class="find">尋找其他文物</button>-->
+    </div>
+    <div id="scanner">
+        <div class="panel">
+            <div class="mask"></div>
+            <div class="scan">
+                <div class="mask"></div>
+                <div class="range">
+                    <div class="left top"></div>
+                    <div class="right top"></div>
+                    <div class="left bottom"></div>
+                    <div class="right bottom"></div>
+                </div>
+                <div class="mask">
+                    <div class="testfont">移動你的手機，掃描牆面上的辨識圖示</div>
+                </div>
+            </div>
+            <div class="mask"></div>
+        </div>
+        <div class="title"></div>
+    </div>
+    
+    <div id="dialogue" class="waitting">
+        <div class="mask show"></div>
+        <div class="chapter">
+            <span class="title"></span>
+            <span class="subtitle"></span>
+        </div>
+        <div class="headBG_container">
+            <div class="headBG">
+                <div class="headBG_Alertimg">
+                    <button class="hideButton">OK</button>
+                </div>
+            </div>   
+            
+            <div class="MenuBG">
+                <div class="menuItem">
+                    <span class="chinese">預約參訪</span>
+                    <span class="english">Reservation to visit</span>
+                </div>
+                <div class="separator"></div>
+                <div class="menuItem">
+                    <span class="chinese">預約手作</span>
+                    <span class="english">Reservation to DIY</span>
+                </div>
+                <div class="separator"></div>
+                <div class="menuItem">
+                    <span class="chinese">美味餐點</span>
+                    <span class="english">Special meal</span>
+                </div>
+                <div class="separator"></div>
+                <div class="menuItem">
+                    <span class="chinese">海鮮及伴手禮</span>
+                    <span class="english">Fresh seafood</span>
+                </div>
+            </div>
+            
+
+        </div>
+
+        <div class="main">
+            <div class="character"><img class="head1"><img class="head2"></div>
+            <div class="panel" oncontextmenu="return false;">
+                <div class="background">
+                    <img class="default">
+                    <img class="top">
+                    <img class="bottom">
+                </div>
+                <div class="content"></div>
+                <img class="next" src="next.png">
+            </div>
+        </div>
+        <div class="finish">
+            <div class="gap"></div>
+            <div class="finish-panel">
+                <div class="title">體驗完畢</div>
+                <div class="subtitle">感謝您的體驗</div>
+            </div>
+            <button class="replay">重新體驗</button>
+            <div class="gap"></div>
+        </div>
+    </div>
+    <div id="start-page">
+        <div class="gap"></div>
+        <div class="mainimg">
+            <div class="mainimgTitle"></div>
+            <div class="mainimgAlert">
+                <button id="play">開始體驗</button>
+            </div>
+
+        </div>
+        
+        <div class="title">
+            
+            <div class="main"></div>
+            <div class="subtitle"></div>
+        </div>
+        <div id="info"></div>
+        <div class="name">請輸入受邀者名稱</div>
+        <input type="text" maxlength="15">
+        <!-- <button id="play">開始體驗</button> -->
+        <div class="gap"></div>
+    </div>
+    <audio id="sound"><source></audio>
+    <div id="log"></div>
+    
+    <script  src="./littegame.js"></script>
+</body>
+
+</html>

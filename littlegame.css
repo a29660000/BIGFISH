@@ -1,0 +1,1437 @@
+
+.QuizCanvas {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #31364500;
+  font-family: 'Noto Sans TC', sans-serif;
+
+  z-index: 0;
+
+  width: 100%;
+  height: 100%;
+  top: 50%; /* 将整个容器移至页面底部 */
+  bottom: 10%; /* 将整个容器限制在页面底部10%到40%的位置 */
+  transform: translateY(-50%); /* 使容器在垂直方向居中 */
+}
+
+.QuizSize {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+  width: 100%; /* 使用百分比，使其响应高度变化 */
+  max-width: 360px; /* 最大宽度限制 */
+  height: auto; /* 高度自适应 */
+  max-height: 0%; /* 最大高度限制 */
+  margin: 0 auto; /* 水平居中 */
+}
+  .progress {
+    height: 5px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+  }
+  
+  .progress--bar {
+    background-color: #00ff00;
+    height: 100%;
+    transition: all ease 0.5s;
+    width: 0%;
+  }
+  
+  .questionArea,
+  .scoreArea {
+    display: none;
+  }
+  
+  .questionArea {
+    max-width: 600px;
+    width: 100%;
+    padding: 0 15px;
+  }
+
+  .questionArea {
+    position: relative;
+    padding: 4px 20px;
+    /* background-color: rgba(255, 255, 255, 0.6); */
+    /* border: 2px solid rgb(54, 33, 0); */
+    border-radius: 50px; /* 圆角50px */
+    max-width: 100%; /* 固定大小，可以根据需要调整 */
+    margin: 0 auto; /* 居中 */
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    /* backdrop-filter: blur(4px); */
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 使内部元素水平居中 */
+    justify-content: center; /* 使内部元素垂直居中 */
+    text-align: center; /* 使文本居中 */
+
+    /* font-family: 'wt014', sans-serif; */
+    
+}
+  
+  .question {
+    color: #0e0e0e;
+    /* margin: 20px 0; */
+    text-align: center; /* 左右对齐 */
+    text-justify: inter-ideograph; /* 确保中文字符的间距也被考虑 */
+    font-size: 16px;
+
+    background-color: #ffffff;
+    border-radius: 15px;
+
+    padding: 20px 5px; /* 内边距 */
+    opacity: 0.8;
+  }
+
+  .options {
+    width: 100%;
+    /* display: flex; */
+    /* flex-wrap: wrap; */
+    justify-content: center; /* 居中对齐 */
+    gap: 0px; /* 定义选项之间的间距 */
+    margin-top: 15px;
+    padding: 0 15px;
+}
+.options > * {
+  margin-bottom: 12px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    padding: 14px 25px; /* 内边距 */
+    height: auto; /* 高度根据内容自动调整 */
+    background-color: #8D8DE2;
+    opacity: 0.8;
+    border-radius: 15px;
+    color: #2e2e2e;
+    font-size: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    white-space: nowrap; /* 防止内容换行 */
+    font-family: 'wt014', sans-serif;
+    flex-basis: calc(33.333% - 20px); /* 确保一行最多显示三个选项，并考虑间距 */
+    flex-grow: 1; /* 保证选项在可用空间内均匀分布 */
+}
+
+.option span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 0px;
+    height: 0px;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #4b5677;
+    opacity: 0;
+
+    position: none;
+}
+
+.option.incorrect {
+  background-color: #D7675D; /* 半透明 */
+  color: #141721; /* 字體顏色變成暗紅色 */
+}
+
+.option.correct {
+  background-color: #83B548; /* 綠色 */
+  color: #141721; /* 字體顏色變成白色 */
+}
+ 
+  /* .option:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+  } */
+  
+  .scoreArea {
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 20px;
+    border-radius: 20px;
+    margin: 10px;
+    text-align: center;
+  }
+  
+  .prizeImage {
+    width: auto;
+    height: 100px;
+    margin-bottom: 10px;
+  }
+  
+  .scoreText1 {
+    color: #000;
+    font-size: 23px;
+    font-weight: bold;
+    margin: 20px auto 10px;
+  }
+  
+  .scorePct {
+    color: #0d630d;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .scoreText2 {
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 10px;
+  }
+  
+  .scoreArea button {
+    border: 0;
+    border-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #ccc;
+    padding: 10px 80px;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+  .scoreArea button:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap');
+
+  .notification-container {
+    z-index: 9;
+    position: relative;
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+
+    top: 50%;
+    transition: transform 5.5s ease;
+    transform: scale(0);
+
+    display: none;
+  }
+
+  .notification-container.show {
+    display: block;
+    animation: scaleUp 0.5s ease forwards;
+  }
+
+  @keyframes scaleUp {
+    0% {
+      transform: scale(0);
+    }
+    20% {
+      transform: scale(0.2);
+    }
+    40% {
+      transform: scale(0.6);
+    }
+    60% {
+      transform: scale(1.2);
+    }
+    80% {
+      transform: scale(1.15);
+    }
+    90% {
+      transform: scale(1.075);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
+  
+  .notification-img {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: -110px; /* 根据需要调整图片与通知框之间的间距 */
+    left: 50%;
+    transform: translateX(-50%);
+
+    background-image: url('UI/Correct.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    z-index: 9;
+  }
+  
+  .notification {
+    position: relative; /* 更改为 relative 以便子元素绝对定位 */
+    /* background: rgb(230, 230, 230); */
+    color: #2e2e2e;
+    padding: 10px 20px;
+    border-radius: 25px;
+    z-index: 1000;
+    font-size: 18px;
+    /* font-family: 'wt014', sans-serif; */
+    width: 100%;
+  }
+  
+
+  .notification.correct {
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  }
+  
+  .notification.incorrect {
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  }
+  
+    .notification::after {
+    /* content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 20px;
+    height: 20px;
+    background: rgb(230, 230, 230); */
+  }
+  
+  
+  
+  /* -------------------------------------------------------------- */
+  
+  .PaperRockScissorsCanvas {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100vw;
+  
+    z-index: 0; 
+
+  }
+  
+  .PaperRockScissorsSize {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 1rem;
+    
+  }
+  
+  @font-face {
+    font-family: 'wt014';
+    src: url('fonts/wt014.ttf') format('truetype');
+}
+
+.PaperRockScissorsCanvas.yesHere:before {
+    top: 50%;
+    content: "勝利！";
+    color: #ffc400;
+    font-family: 'wt014', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.PaperRockScissorsCanvas.egalHere:before {
+    content: "平手!";
+    color: #D7E9EF;
+    font-family: 'wt014', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.PaperRockScissorsCanvas.noHere:before {
+    content: "輸了..再來一把！";
+    color: #ff4732;
+    font-family: 'wt014', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+  
+  .PaperRockScissorsCanvas.yesHere:before,
+  .PaperRockScissorsCanvas.egalHere:before {
+    position: fixed;
+    top: -35%;
+    left: 0;
+    /* text-shadow: 5px 5px 3px black; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'wt014', sans-serif;
+    font-size: 15vw;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    z-index: 5;
+  }
+  
+  .PaperRockScissorsCanvas.noHere:before{
+    position: fixed;
+    top: -35%;
+    left: 0;
+    /* text-shadow: 5px 5px 3px black; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8vw;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    z-index: 5;
+  }
+  
+  .stonePaperCut {
+    bottom: 20%;
+    position: absolute;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .resultHere {
+    /* display: flex; */
+    top: 55%;
+    position: absolute;
+    gap: 15vw;
+    font-size: 15vw;
+  }
+  
+  button {
+    font-size: 0; /* Hide the text */
+    background: #ffffffda;
+    color: #eee;
+    border: none;
+    border-radius: 50px;
+    width: 60px;
+    height: 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+button .icon {
+    width: 40px;
+    height: 40px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    filter: grayscale(1);
+}
+
+button.paper .icon {
+    background-image: url('UI/Paper.png');
+}
+
+button.rock .icon {
+    background-image: url('UI/Rock.png');
+}
+
+button.scissors .icon {
+    background-image: url('UI/Scissors.png');
+}
+
+  
+  .playNowAnimationAZ {
+    animation: 0.5s playNowAnimationA 3;
+  }
+  
+  .playNowAnimationBZ {
+    animation: 0.5s playNowAnimationB 3;
+  }
+  
+  #blackWhiteBackground {
+    display: grid;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: -2;
+    filter: brightness(0.25);
+    transform: translate(-50%, -50%);
+  }
+  
+  #blackWhiteBackground div {
+    position: relative;
+    width: 155px;
+    height: 155px;
+    box-sizing: border-box;
+  }
+  
+  #blackWhiteBackground div:nth-child(even) {
+    background: #050505;
+    border: 1px solid #757575;
+  }
+  
+  #blackWhiteBackground div:nth-child(odd) {
+    background: #fff;
+    border: 1px solid #050505;
+  }
+  
+  @keyframes playNowAnimationA {
+    0% {
+      transform: rotate(0);
+    }
+  
+    50% {
+      transform: rotate(-55deg);
+    }
+    100% {
+      transform: rotate(0);
+    }
+  }
+  
+  @keyframes playNowAnimationB {
+    0% {
+        transform: rotate(0) scaleX(-1);
+    }
+    50% {
+        transform: rotate(55deg) scaleX(-1);
+    }
+    100% {
+        transform: rotate(0) scaleX(-1);
+    }
+}
+
+#bHere {
+    transform: scaleX(-1);
+}
+
+
+  #aHere {
+    height: 90px;
+    width: 90px;
+
+    filter: brightness(0.5) grayscale(1);
+  }
+
+  #bHere {
+    height: 60px;
+    width: 60px;
+    transform: scaleX(-1);
+
+    display: none;
+  }
+
+  /* 添加過渡效果和動畫 */
+  button {
+    transition: transform 0.3s ease, left 0.3s ease, top 0.3s ease;
+    position: relative;
+}
+
+button.active {
+    transform: scale(2.0);
+}
+
+button.inactive-left {
+    transform: scale(0.0) translateX(60px);
+}
+
+button.inactive-right {
+    transform: scale(0.0) translateX(-60px);
+}
+
+  /* ================================================================= */
+
+  /* MAIN STYLES FOR PLAY BUTTON */
+
+  .VideoCanvas {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100vw;
+    z-index: 0;
+}
+
+.VideoSize {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    box-sizing: border-box;
+    /* padding: 1rem; */
+    
+}
+
+#video-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    border: 3px solid var(--brown);
+    border-radius: 5px;
+    position: relative;
+    cursor: none;
+    max-width: 100%;
+}
+
+#play-button {
+    position: absolute;
+    border: 3px solid var(--brown);
+    border-radius: 100px;
+    width: 120px;
+    height: 120px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--cream);
+    opacity: 1;
+    cursor: none;
+}
+
+#gamevideo {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.play-icon {
+    font-size: 20px;
+    color: var(--brown);
+}
+
+/* END OF MAIN STYLES FOR PLAY BUTTON */
+
+/* Optional */
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+::placeholder {
+    color: var(--brown);
+    opacity: 30%;
+}
+
+::selection {
+    background-color: var(--brown);
+    color: var(--cream);
+}
+
+.info {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    max-width: 100%;
+
+    width: 100%;
+    height: 100%;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.videobutton {
+    position: absolute;
+    border: 3px solid var(--brown);
+    background-color: #ff9100;
+    color: #ffffff;
+    /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); */
+    box-shadow: 0 4px 10px #0000006b;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    width: 120px;
+    height: 30px;
+    justify-content: center;
+    /* font-family: "IBM Plex Mono"; */
+    font-size: 16px;
+    font-weight: 300;
+    font-family: 'wt014', sans-serif;
+    letter-spacing: 2px;
+    cursor: pointer;
+
+    z-index: 1;
+
+    top: 75%;
+}
+
+.button:hover {
+    background-color: var(--cream);
+    color: var(--brown);
+}
+
+.button > p {
+    margin: 0;
+}
+
+.one {
+    width: 70%;
+    padding: 0 20px;
+    border: 3px solid var(--brown);
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    background-color: var(--cream);
+    font-family: "IBM Plex Mono";
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.description {
+    height: fit-content;
+    box-sizing: border-box;
+    padding: 20px 20px;
+    border: 3px solid var(--brown);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--cream);
+    font-size: 16px;
+}
+
+.description > * {
+    margin: 0;
+}
+
+.link {
+    border-bottom: 2px solid var(--brown);
+}
+
+.link:hover {
+    background-color: var(--brown);
+    color: var(--cream);
+}
+
+/* =========================================================================================================*/
+.header-container {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 70px; /* 調整高度 */
+  background-color: #f0f0f000; /* 可以更改背景顏色 */
+  z-index: 999; /* 確保在最上層 */
+  padding: 0 16px; /* 左右內邊距 */
+}
+
+.MapButton {
+  width: 50px;
+  height: 50px;
+  background: #00ff0000;
+  background-image: url("UI/Map.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  color: white;
+  font-size: 14px; /* 可以根據需要調整 */
+  text-align: center;
+
+  filter: brightness(100);
+  line-height: 120px;
+  letter-spacing: 2px;
+}
+
+.BeastName {
+  font-size: 2.5vh; /* 使用視口高度來調整字體大小 */
+  color: rgb(255, 255, 255); /* 更改字體顏色 */
+  text-align: center;
+  font-family: 'wt014', sans-serif;
+
+  display: none;
+}
+
+
+.CollectButton, .CollecReturnimg, .CardButton, .MenuButton {
+  width: 50px;
+  height: 50px;
+  background: #ffffff00;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-left: 8px; /* 調整左右間距 */
+
+  filter: brightness(100);
+
+  color: white;
+  font-size: 14px; /* 可以根據需要調整 */
+  text-align: center;
+
+  filter: brightness(100);
+  line-height: 120px;
+  letter-spacing: 2px;
+}
+
+.CollectButton {
+  background-image: url("UI/Collection.png");
+  white-space: nowrap;
+}
+
+.CollecReturnimg {
+  background-image: url("UI/Return.png");
+  display: none; /* 根據需求顯示或隱藏 */
+}
+
+.CardButton {
+  /* position: absolute; */
+  background-image: url("UI/Card.png");
+  /* top: 100px; */
+  margin-left: 0px;
+  display: none;
+  white-space: nowrap; /* 防止内容换行 */
+}
+
+.CardButton img {
+  width: 150px; /* Adjust the width as per your card size */
+  height: 200px;
+  margin: 0 20cm; /* Adjust this to create the desired space between images */
+}
+
+.MenuButton {
+  background-image: url("UI/Selection_Icon.png");
+  white-space: nowrap;
+}
+
+
+@keyframes moveAndShrink {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  80% {
+    transform: translate(calc(50vw - 50% + 50px), calc(-50vh + 50px)) scale(1);
+  }
+  100% {
+    transform: translate(calc(50vw - 50% + 50px), calc(-50vh + 50px)) scale(0);
+  }
+}
+
+@keyframes enlargeButton {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.8);
+  }
+}
+
+.CollectButton.enlarge {
+  animation: enlargeButton 0.5s ease-in-out;
+}
+
+.movingImage {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 50px;
+  height: 50px;
+  /* background-image: url("UI/whale.png"); */
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: 10;
+  transform: translate(-50%, -50%) scale(0);
+  animation: growAndMove 2.5s ease forwards;
+}
+
+/* 灰色背景樣式 */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 半透明灰色背景 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* 提示文字樣式 */
+.message {
+  color: white;
+  font-size: 18px;
+  position: absolute;
+  top: 5%; /* 距離頂部 5% */
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 99;
+
+  width: 90%;
+  letter-spacing: 1px; /* 調整字間距 */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 添加文字陰影 */
+}
+
+
+.movingCard {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 54px;
+  height: 96px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: 10;
+  transform: translate(-50%, -50%) scale(0);
+  animation: grow 0.6s cubic-bezier(.63,1.68,.86,.84) forwards; /* 初始放大動畫 */
+  cursor: pointer; /* 添加指針變化 */
+}
+
+@keyframes grow {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(5); /* 放大至5倍 */
+  }
+}
+
+.movingCard.moveToTopRight {
+  animation: moveToTopRight 2s forwards; /* 點擊後移動至右上角 */
+}
+
+@keyframes moveToTopRight {
+  0% {
+    transform: translate(-50%, -50%) scale(5); /* 放大後的狀態 */
+  }
+  80% {
+    transform: translate(calc(50vw - 55px), calc(-50vh + 25px)) scale(0); /* 移動到右上角並縮小 */
+  }
+  100% {
+    transform: translate(calc(50vw - 75px), calc(-50vh + 25px)) scale(0); /* 保持在右上角並縮小 */
+  }
+}
+
+
+
+
+@keyframes growAndMove {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  20% {
+    transform: translate(-50%, -50%) scale(5);
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(4);
+  }
+  100% {
+    transform: translate(calc(50vw - 50% + 0px), calc(-50vh + 0px)) scale(0);
+  }
+}
+
+
+.CollecReturnimg {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  right: 0px;
+  margin: 16px;
+  background: #00ff0000;
+  z-index: 11;
+  background-image: url("UI/Return.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  display: none;
+}
+
+.CollectBG {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  min-width: 100vw;
+  background-image: url("UI/Treasure_BG.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 10;
+  transform: scale(1.0);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.CardBG {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  min-width: 100vw;
+  background-image: url("UI/CardCollectBG.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 10;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Align items in a column */
+}
+
+.content-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 55%;
+}
+
+.card {
+  width: 160px; /* Adjust the width as needed */
+  height: 290px; /* Adjust the height as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Align text to the center */
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  font-size: 16px; /* Adjust font size as needed */
+  font-weight: bold;
+  color: white; /* Ensure text is visible on the background */
+  padding: 10px;
+  letter-spacing: 3px;
+}
+
+.left-card {
+  background-image: url('UI/Crad_Black.png');
+}
+
+.right-card {
+  background-image: url('UI/Crad_Black.png');
+}
+
+.cardownload_Font {
+  margin-top: 20px; /* Ensure it is 20px below the content-container */
+  text-align: center;
+  font-size: 16px; /* Adjust font size as needed */
+  font-weight: bold;
+  color: white; /* Ensure text is visible on the background */
+  padding: 10px;
+  white-space: nowrap; /* 禁止換行 */
+}
+
+
+
+.Collecimg-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%; /* 使用百分比來調整大小 */
+  max-width: 240px; /* 設置最大寬度以防止過大 */
+  margin-top: 15%; /* 調整這裡來改變整體的垂直位置 */
+  position: relative;
+}
+
+.Collecimg {
+  width: 24vh; /* 使用視口高度來調整大小 */
+  height: 24vh; /* 使用視口高度來調整大小 */
+  position: relative;
+  background: #00ff0000;
+  z-index: 11;
+  background-image: url("character1.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.CollectLoadMesh {
+  width: 18.5vh; /* 使用視口高度來調整大小 */
+  height: 3.5vh; /* 使用視口高度來調整大小 */
+  position: absolute;
+  left: 50%;
+  top: 105%;
+  transform: translateX(-50%);
+  background: #3dad3d00;
+  z-index: 11;
+  background-color: rgba(255, 255, 255, 0.877);
+  border-radius: 50px;
+  font-family: 'wt014', sans-serif;
+  text-align: center;
+  letter-spacing: 3px;
+  display: none;
+  justify-content: center; /* 水平置中 */
+  align-items: center; /* 垂直置中 */
+}
+
+.OfficialWebButton {
+  width: auto; /* 自動調整寬度 */
+  padding: 10px 20px; /* 設定左右內邊距來保持一致的外觀 */
+  position: relative;
+  /* bottom: 0%; */
+  top: 20px;
+  background: #3dad3d00;
+  z-index: 11;
+  background-color: rgb(255, 123, 35);
+  color: #fff3f3;
+  border-radius: 50px;
+  font-family: 'wt014', sans-serif;
+  text-align: center;
+  letter-spacing: 3px;
+  display: none;
+  justify-content: center; /* 水平置中 */
+  align-items: center; /* 垂直置中 */
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
+
+.OfficialWebButton.shake {
+  animation: shake 0.5s;
+}
+
+
+
+  .TakePhoto {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 50%;
+    bottom: 10%;
+    transform: translateX(-50%);
+    background: #00ff0000;
+    z-index: 11;
+    background-image: url("UI/Photo_unclick.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    background-color: #ffffff00;
+    border-radius: 50%;
+
+    display: none;
+
+    border: 3px solid white;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 0px;
+    position: relative;
+    margin-top: 60px;
+  }
+  
+  .grid-item {
+    width: 12vh;
+    height: 12vh;
+    background-image: url("UI/Collectitem.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.5em;
+    position: relative;
+  }
+
+.dimmed {
+  opacity: 0.5;
+}
+
+.beast-icon {
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: none;
+
+    pointer-events: none;
+}
+
+.Share-container {
+  position: fixed;
+  bottom: 4%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 999;
+}
+
+.FBShareButton, .IGShareButton {
+  width: 50px;
+  height: 50px;
+  background-size: cover;
+  margin: 0 8.5px; /* 每邊 2.5px，共間隔 5px */
+
+  /* background-color: #ffffff; */
+  border-radius: 20px;
+  
+}
+
+.TKagainButton {
+  width: 80px;
+  height: 40px;
+  /* background-color: #ffffff; */
+  margin: 0 10.5px; /* 每边 10.5px，总共间隔 21px */
+  
+  border-radius: 20px;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-image: url("UI/ReTakePhoto.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  
+  font-size: 16px; /* 根据需要调整字体大小 */
+  letter-spacing: 1px; /* 设置字间距 */
+}
+
+
+/* 假設你有圖片 URL */
+.FBShareButton {
+  background-image: url('UI/FBShare_clicked.png'); /* 替換為你的 Facebook 圖片路徑 */
+}
+
+.IGShareButton {
+  background-image: url('UI/IGShare_clicked.png'); /* 替換為你的 Instagram 圖片路徑 */
+}
+
+/* ============================================================================= */
+
+
+.photocontainer {
+  top: 0;
+  cursor: pointer;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  background-image: url("UI/Treasure_BG.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  /* z-index: -1000; */
+  opacity: 0;
+}
+
+
+.photocontainer:focus {
+  display: none;
+}
+
+.flap {
+  width: 150vmax;
+  height: 150vmax;
+  position: absolute;
+  bottom: 50%;
+  right: 50%;
+  pointer-events: none;
+  will-change: transform;
+  background: hsl(calc(1turn * var(--p)), 80%, 80%);
+  background: linear-gradient(35deg, #555, black);
+  border: solid 4px #999;
+  --p: calc(var(--i) / var(--flaps));
+  -webkit-animation: click 0.9s cubic-bezier(0.5, 0, 0.5, 1) 0.1s;
+          animation: click 0.9s cubic-bezier(0.5, 0, 0.5, 1) 0.1s;
+  transform-origin: bottom right;
+  transform: rotate(-0.5turn) rotate(calc(1turn * var(--p))) skewX(30deg) translateX(-100%) translateY(90%);
+}
+
+@-webkit-keyframes click {
+  48%, 52% {
+    transform: rotate(-0.25turn) rotate(calc(1turn * var(--p))) skewX(30deg) translateX(0%) translateY(0%);
+  }
+}
+
+@keyframes click {
+  48%, 52% {
+    transform: rotate(-0.25turn) rotate(calc(1turn * var(--p))) skewX(30deg) translateX(0%) translateY(0%);
+  }
+}
+
+.photo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  background-position: center center;
+  background-size: cover;
+  box-shadow: 0 10px 40px #000;
+  /* margin: -1rem; */
+  margin-bottom: -5rem;
+  border: solid 1rem #fff;
+  border-bottom-width: 5rem;
+  object-fit: cover; /* Ensures the video covers the entire container */
+  -webkit-animation: photo 5s cubic-bezier(0.5, 0, 0.5, 1) 0.9s both;
+          animation: photo 5s cubic-bezier(0.5, 0, 0.5, 1) 0.9s both;
+}
+
+@-webkit-keyframes photo {
+  30%, 60%, 70% {
+    filter: sepia(30%) saturate(140%) contrast(120%);
+    transform: scale(0.5) rotate(-4deg);
+  }
+  61% {
+    opacity: 1;
+  }
+  71% {
+    opacity: 0;
+    transform: none;
+  }
+  100% {
+    filter: none;
+    opacity: 1;
+  }
+}
+
+@keyframes photo {
+  30%, 60%, 70% {
+    filter: sepia(30%) saturate(140%) contrast(120%);
+    transform: scale(0.5) rotate(-4deg);
+  }
+  61% {
+    opacity: 1;
+  }
+  71% {
+    opacity: 0;
+    transform: none;
+  }
+  100% {
+    filter: none;
+    opacity: 1;
+  }
+}
+
+.instructions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  padding: 1rem;
+  font-family: monospace;
+  text-transform: uppercase;
+  text-shadow: 0 1px 8px #fff;
+  color: white;
+}
+
+@media (min-aspect-ratio: 16/9) {
+  .container {
+    width: 100vw;
+    height: auto;
+  }
+}
+
+@media (max-aspect-ratio: 16/9) {
+  .container {
+    width: auto;
+    height: 100vh;
+  }
+}
+
+
+#map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 900; /* 确保地图在最上层 */
+  display: none; /* 初始状态隐藏 */
+  overflow: hidden; /* 隐藏滚动条 */
+}
+#mapContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* 隐藏溢出的部分 */
+  cursor: grab;
+}
+
+#mapImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: auto;
+  user-drag: none;
+  user-select: none;
+  transform-origin: center center;
+}
+
+
+.Final-button {
+  position: fixed; /* 改为 fixed 以确保按钮相对于视窗固定 */
+  top: 21%; /* 位置 */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 9;
+  display: flex; /* 使用 Flexbox 布局 */
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+}
+
+.link-button {
+  font-family: 'wt014', sans-serif;
+  display: inline-block;
+  padding: 12px; /* 上下左右预留8px */
+  font-size: 16px;
+  color: #fff;
+  background-color: #ff5100;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap; /* 防止文本换行 */
+  margin-right: 10px; /* 与图片按钮的间距 */
+
+  height: 43px;
+
+  margin: 20px;
+}
+
+.link-button:hover {
+  background-color: #a73500;
+}
+
+.image-button {
+  width: 43px; /* 设置按钮宽度 */
+  height: 43px; /* 设置按钮高度 */
+  border-radius: 5px;
+  overflow: hidden; /* 确保图片不会溢出 */
+}
+
+.image-button img {
+  width: 100%; /* 图片宽度设为按钮宽度的100% */
+  height: 100%; /* 图片高度设为按钮高度的100% */
+  object-fit: cover; /* 确保图片填充按钮，并保持比例 */
+  cursor: pointer;
+  border-radius: 5px; /* 确保图片圆角与按钮一致 */
+}
+
