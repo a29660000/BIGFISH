@@ -434,58 +434,51 @@ function loadVideo() {
 }
 
 // loadButton.addEventListener("click", loadVideo);
-loadButton.addEventListener("click", function() {
-  PlayMusic(true);
-});
+// 在頁面載入後或在第一次互動時定義音效物件
+const audiomusic = new Audio();
+audiomusic.autoplay = true;
 
-function PlayMusic(requestPlay = false) {
+// 播放一個靜音的短音效，觸發瀏覽器允許音樂播放的權限
+audiomusic.src = "data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV";
 
-  $('.VideoCanvas').css('z-index', 0);
-  
-  console.log(foundARIndex + 1);
-  // 構建音樂檔案的路徑
-  const CollecReturnimg = document.querySelector('.CollecReturnimg');
-  const musicFilePath = `model/${foundARIndex + 1}/music.mp3`;
+loadButton.addEventListener("click", PlayMusic);
 
-  // 創建一個 Audio 物件
-  audiomusic = new Audio(musicFilePath);
-  
-  // 如果是在用戶交互後，立即請求播放音樂
-  if (requestPlay) {
-      audiomusic.play().then(() => {
-          console.log('音樂已準備好播放');
-          CollecReturnimg.style.display = 'block';       
-          MenuButton.style.display = 'none';
-      }).catch(error => console.error('音樂播放失敗:', error));
-  }
+function PlayMusic() {
+    $('.VideoCanvas').css('z-index', 0);
 
-  // 檢查音樂檔案是否存在
-  audiomusic.addEventListener('canplaythrough', function() {
-      if (!requestPlay) {
-          console.log('音樂已準備好播放');                                               
-          CollecReturnimg.style.display = 'block';       
-          MenuButton.style.display = 'none';
+    console.log(foundARIndex + 1);
+    // 構建音樂檔案的路徑
+    const CollecReturnimg = document.querySelector('.CollecReturnimg');
+    const musicFilePath = `model/${foundARIndex + 1}/music.mp3`;
 
-          // 播放音樂
-          audiomusic.play().catch(error => console.error('音樂播放失敗:', error));
-      }
-  }, false);
+    // 在需要播放音樂時設定音樂的 src
+    audiomusic.src = musicFilePath;
 
-  // 錯誤處理，檢查檔案是否存在或其他錯誤
-  audiomusic.addEventListener('error', function() {
-      console.error('無法加載音樂:', musicFilePath);
-  }, false);
+    // 檢查音樂檔案是否存在
+    audiomusic.addEventListener('canplaythrough', function() {
+        console.log('音樂已準備好播放');                                               
+        CollecReturnimg.style.display = 'block';       
+        MenuButton.style.display = 'none';
 
-  // 播放完成後處理
-  audiomusic.addEventListener('ended', function() {
-      console.log('播放完成');
-      CollecReturnimg.style.display = 'none';       
-      MenuButton.style.display = 'block';
-      $('.VideoCanvas').css('z-index', 0);
-      model.close();
-      scanner.start();
-      // 在這裡添加你想要在音樂播放完後執行的後續處理邏輯
-  });
+        // 播放音樂
+        audiomusic.play().catch(error => console.error('音樂播放失敗:', error));
+    }, false);
+
+    // 錯誤處理，檢查檔案是否存在或其他錯誤
+    audiomusic.addEventListener('error', function() {
+        console.error('無法加載音樂:', musicFilePath);
+    }, false);
+
+    // 播放完成後處理
+    audiomusic.addEventListener('ended', function() {
+        console.log('播放完成');
+        CollecReturnimg.style.display = 'none';       
+        MenuButton.style.display = 'block';
+        $('.VideoCanvas').css('z-index', 0);
+        model.close();
+        scanner.start();
+        // 在這裡添加你想要在音樂播放完後執行的後續處理邏輯
+    });
 }
 
 
