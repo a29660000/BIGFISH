@@ -638,15 +638,15 @@ a {
 .videobutton {
     position: absolute;
     border: 3px solid var(--brown);
-    background-color: #ff9100;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #353535;
     /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); */
     box-shadow: 0 4px 10px #0000006b;
     border-radius: 50px;
     display: flex;
     align-items: center;
-    width: 120px;
-    height: 30px;
+    width: 180px;
+    height: 50px;
     justify-content: center;
     /* font-family: "IBM Plex Mono"; */
     font-size: 16px;

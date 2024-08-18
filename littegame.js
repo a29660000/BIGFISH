@@ -433,7 +433,46 @@ function loadVideo() {
     // }
 }
 
-loadButton.addEventListener("click", loadVideo);
+// loadButton.addEventListener("click", loadVideo);
+loadButton.addEventListener("click", PlayMusic);
+
+function PlayMusic(){
+
+  $('.VideoCanvas').css('z-index', 0);
+  
+  console.log(foundARIndex + 1);
+  // 構建音樂檔案的路徑
+  const CollecReturnimg = document.querySelector('.CollecReturnimg');
+  const musicFilePath = `model/${foundARIndex + 1}/music.mp3`;
+
+  // 創建一個 Audio 物件
+  audiomusic = new Audio(musicFilePath);
+  // 檢查音樂檔案是否存在
+  audiomusic.addEventListener('canplaythrough', function() {
+      console.log('音樂已準備好播放');                                               
+      CollecReturnimg.style.display = 'block';       
+      MenuButton.style.display = 'none';
+
+      // 播放音樂
+      audiomusic.play().catch(error => console.error('音樂播放失敗:', error));
+  }, false);
+
+  // 錯誤處理，檢查檔案是否存在或其他錯誤
+  audiomusic.addEventListener('error', function() {
+      console.error('無法加載音樂:', musicFilePath);
+  }, false);
+  // 播放完成後處理
+  audiomusic.addEventListener('ended', function() {
+      console.log('播放完成');
+      CollecReturnimg.style.display = 'none';       
+      MenuButton.style.display = 'block';
+      $('.VideoCanvas').css('z-index', 0);
+      model.close();
+      scanner.start();
+      // 在這裡添加你想要在音樂播放完後執行的後續處理邏輯
+  });
+
+}
 
 // ==================================================================================================================
 
@@ -495,6 +534,7 @@ CollecReturnimg.addEventListener('click', () => {
   console.log('點擊返回鍵')
   if(true){
 
+    $('.VideoCanvas').css('z-index', 0);
     $('.QuizCanvas').css('z-index', 0);
     resetOptions();
     showQuestion();
