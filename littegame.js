@@ -434,9 +434,11 @@ function loadVideo() {
 }
 
 // loadButton.addEventListener("click", loadVideo);
-loadButton.addEventListener("click", PlayMusic);
+loadButton.addEventListener("click", function() {
+  PlayMusic(true);
+});
 
-function PlayMusic(){
+function PlayMusic(requestPlay = false) {
 
   $('.VideoCanvas').css('z-index', 0);
   
@@ -447,20 +449,33 @@ function PlayMusic(){
 
   // 創建一個 Audio 物件
   audiomusic = new Audio(musicFilePath);
+  
+  // 如果是在用戶交互後，立即請求播放音樂
+  if (requestPlay) {
+      audiomusic.play().then(() => {
+          console.log('音樂已準備好播放');
+          CollecReturnimg.style.display = 'block';       
+          MenuButton.style.display = 'none';
+      }).catch(error => console.error('音樂播放失敗:', error));
+  }
+
   // 檢查音樂檔案是否存在
   audiomusic.addEventListener('canplaythrough', function() {
-      console.log('音樂已準備好播放');                                               
-      CollecReturnimg.style.display = 'block';       
-      MenuButton.style.display = 'none';
+      if (!requestPlay) {
+          console.log('音樂已準備好播放');                                               
+          CollecReturnimg.style.display = 'block';       
+          MenuButton.style.display = 'none';
 
-      // 播放音樂
-      audiomusic.play().catch(error => console.error('音樂播放失敗:', error));
+          // 播放音樂
+          audiomusic.play().catch(error => console.error('音樂播放失敗:', error));
+      }
   }, false);
 
   // 錯誤處理，檢查檔案是否存在或其他錯誤
   audiomusic.addEventListener('error', function() {
       console.error('無法加載音樂:', musicFilePath);
   }, false);
+
   // 播放完成後處理
   audiomusic.addEventListener('ended', function() {
       console.log('播放完成');
@@ -471,8 +486,8 @@ function PlayMusic(){
       scanner.start();
       // 在這裡添加你想要在音樂播放完後執行的後續處理邏輯
   });
-
 }
+
 
 // ==================================================================================================================
 
